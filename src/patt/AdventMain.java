@@ -193,10 +193,11 @@ public class AdventMain extends GameCore {
 			
 			for (int k = 0; k < numOfGrubby; k++)
 			{
-				badArmy.addGrub(createNormalGrub());
+				Grub grub = new Grub();
+				badArmy.addGrub(grub);
 	        	gStarters.chooseLoc();
 				badArmy.setGrubLoc(badArmy.getSize()-1, gStarters.getX(), gStarters.getY());
-				badArmy.getGrub(badArmy.getSize()-1).setHealthBarSize(Grub.grubImageWidth);
+				badArmy.getGrub(badArmy.getSize()-1).setHealthBarSize(grub.grubImageWidth);
 			}
 			
 			isShop = true;
@@ -254,7 +255,7 @@ public class AdventMain extends GameCore {
         //This is also if the Grub lose their target
         for (int k = 0; k < badArmy.getSize(); k++)
         {
-        	badArmy.getGrub(k).setHealthBarSize((Grub.grubImageWidth * badArmy.getGrub(k).getHealth()) / 100);
+        	badArmy.getGrub(k).setHealthBarSize((badArmy.getGrub(k).grubImageWidth * badArmy.getGrub(k).getHealth()) / 100);
         	if (badArmy.getGrub(k).hasTarget() && badArmy.getGrub(k).getTarget().getHealth() <= 0)
         		badArmy.getGrub(k).lostTarget();
         	if (badArmy.getGrub(k).getHealth() <= 0)
@@ -834,10 +835,9 @@ public class AdventMain extends GameCore {
 		// draw background
 		g.setColor(Color.green);
         //g.fillPolygon(bgImage);
-		for (int k = 0; k < grassGrid.size(); k++)
-		{
-			
-			g.drawImage(grassGrid.get(k).getImage(), (int) grassGrid.get(k).getX(), (int) grassGrid.get(k).getY(), null);
+		for (Sprite sprite : grassGrid) {
+
+			g.drawImage(sprite.getImage(), (int) sprite.getX(), (int) sprite.getY(), null);
 		}
         
         
@@ -980,13 +980,8 @@ public class AdventMain extends GameCore {
 		
 	}
 	
-	public static Animation grubIdleR, grubIdleL, grubIdleU, grubIdleD, grubMoveR, grubMoveL, grubMoveU, grubMoveD, wheatAnim;
-	
-	public static Grub createNormalGrub()
-	{
-		return new Grub(grubIdleR, grubIdleL, grubIdleD, grubIdleU, grubMoveR, grubMoveL, grubMoveD, grubMoveU);
-	}
-	
+	public static Animation wheatAnim;
+
 	public static Weapon setBearTrap(float x, float y)
 	{
 		Weapon w = new Weapon(Weapon.bearTrapAnimation, 100, 5, "BearTrap", Double.POSITIVE_INFINITY);

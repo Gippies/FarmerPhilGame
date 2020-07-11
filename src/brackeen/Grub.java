@@ -2,6 +2,7 @@ package brackeen;
 
 import java.awt.Image;
 import java.util.ArrayList;
+import java.util.List;
 
 import patt.*;
 
@@ -13,8 +14,6 @@ public class Grub extends Sprite {
 	public static float SPEED = (float) .2;
 	public static double grubbyStrength = .05;
 	public static double grubbyHunger = .25;
-	public static int grubImageWidth;
-	public static int grubImageHeight;
 	private static double poisonStrength = .2;
 	private double health;
 	private double healthBarSize;
@@ -25,6 +24,8 @@ public class Grub extends Sprite {
 	private float wanderVY;
 	private float midGrubX;
 	private float midGrubY;
+	public int grubImageWidth;
+	public int grubImageHeight;
 	private int wanderDirection;
 	private Wheat target;
 	private ArrayList<Double> distanceFromWheats;
@@ -33,6 +34,9 @@ public class Grub extends Sprite {
 	private float originalVelocityY;
 	private boolean isPoisoned;
 	private Sprite poisIcon;
+
+	private static final int GRUB_MOVE_ANIMATION_SPEED = 200;
+	private static final int GRUB_IDLE_ANIMATION_SPEED = 1000;
 	
 	private Animation moveR;
 	private Animation moveL;
@@ -49,9 +53,40 @@ public class Grub extends Sprite {
         //super(left, right, deadLeft, deadRight);
     }  */
 	
-	public Grub (Animation anim)
-	{
-		super(anim);
+	public Grub () {
+		String[][] imagePaths = {
+				{"res/GrubbyR.png", "res/GrubbyR2.png", "res/GrubbyR3.png", "res/GrubbyR4.png", "res/GrubbyR5.png"},
+				{"res/GrubbyL.png", "res/GrubbyL2.png", "res/GrubbyL3.png", "res/GrubbyL4.png", "res/GrubbyL5.png"},
+				{"res/GrubbyU.png", "res/GrubbyU2.png", "res/GrubbyU3.png", "res/GrubbyU4.png", "res/GrubbyU5.png"},
+				{"res/GrubbyD.png", "res/GrubbyD2.png", "res/GrubbyD3.png", "res/GrubbyD4.png", "res/GrubbyD5.png"}
+		};
+		List<List<Image>> allFrames = new ArrayList<>();
+		for (String[] imageArray : imagePaths) {
+			List<Image> images = new ArrayList<>();
+			for (String s : imageArray) {
+				images.add(AdventMain.loadImage(s));
+			}
+			allFrames.add(images);
+		}
+
+		moveR = new Animation();
+		moveR.addFrames(allFrames.get(0), GRUB_MOVE_ANIMATION_SPEED);
+		moveL = new Animation();
+		moveL.addFrames(allFrames.get(1), GRUB_MOVE_ANIMATION_SPEED);
+		moveU = new Animation();
+		moveU.addFrames(allFrames.get(2), GRUB_MOVE_ANIMATION_SPEED);
+		moveD = new Animation();
+		moveD.addFrames(allFrames.get(3), GRUB_MOVE_ANIMATION_SPEED);
+		stopR = new Animation();
+		stopR.addFrame(allFrames.get(0).get(0), GRUB_IDLE_ANIMATION_SPEED);
+		stopL = new Animation();
+		stopL.addFrame(allFrames.get(1).get(0), GRUB_IDLE_ANIMATION_SPEED);
+		stopU = new Animation();
+		stopU.addFrame(allFrames.get(2).get(0), GRUB_IDLE_ANIMATION_SPEED);
+		stopD = new Animation();
+		stopD.addFrame(allFrames.get(3).get(0), GRUB_IDLE_ANIMATION_SPEED);
+		grubImageWidth = allFrames.get(0).get(0).getWidth(null);
+		grubImageHeight = allFrames.get(0).get(0).getHeight(null);
 		health = 100;
 		hasWheatTarget = false;
 		distanceFromWheats = new ArrayList<Double>();
@@ -68,35 +103,7 @@ public class Grub extends Sprite {
 		Animation poisAnim = new Animation();
 		poisAnim.addFrame(poisImage, 500);
 		poisIcon = new Sprite(poisAnim);
-	}
-	
-	public Grub (Animation sR, Animation sL, Animation sD, Animation sU, Animation mR, Animation mL, Animation mD, Animation mU)
-	{
-		super(sR);
-		moveR = mR;
-		moveL = mL;
-		moveU = mU;
-		moveD = mD;
-		stopR = sR;
-		stopL = sL;
-		stopU = sU;
-		stopD = sD;
-		health = 100;
-		hasWheatTarget = false;
-		amWandering = false;
-		wanderCounter = 0;
-		distanceFromWheats = new ArrayList<Double>();
-		numOfDistances = 0;
-		originalVelocityX = 0;
-		originalVelocityY = 0;
-		midGrubX = 0;
-		midGrubY = 0;
-		isPoisoned = false;
-		
-		Image poisImage = AdventMain.loadImage("res/poisIcon.png");
-		Animation poisAnim = new Animation();
-		poisAnim.addFrame(poisImage, 500);
-		poisIcon = new Sprite(poisAnim);
+		setAnim(stopR);
 	}
 	
 	public void update(long elapsedTime)
@@ -114,8 +121,8 @@ public class Grub extends Sprite {
 
     /**
      * Designed to set the X Velocity of the Grubby to follow the player
-     * @param Player Loc
-     * @param Grubby Loc
+     * @param pX Player Loc
+     * @param gX Grubby Loc
      * @return Velocity X
      */
     public float followPlayer(float pX, float gX)

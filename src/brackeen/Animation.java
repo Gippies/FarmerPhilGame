@@ -2,6 +2,7 @@ package brackeen;
 
 import java.awt.Image;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
     The Animation class manages a series of images (frames) and
@@ -57,12 +58,19 @@ public class Animation {
         Adds an image to the animation with the specified
         duration (time to display the image).
     */
-    public synchronized void addFrame(Image image,
-        long duration)
+    public synchronized void addFrame(Image image, long duration)
     {
         totalDuration += duration;
         frames.add(new AnimFrame(image, totalDuration));
     }
+
+    public synchronized void addFrames(List<Image> images, long duration) {
+        for (Image image : images) {
+            totalDuration += duration;
+            frames.add(new AnimFrame(image, totalDuration));
+        }
+    }
+
 
 
     /**

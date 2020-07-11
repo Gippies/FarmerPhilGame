@@ -220,91 +220,6 @@ public class CreatorMethods {
 			//AdventMain.player.addWeapon(sprayCan);
 			AdventMain.player.getWeapon().updateLocation(AdventMain.player.getX(), AdventMain.player.getY(), AdventMain.player.getWidth(), AdventMain.player.getHeight(), AdventMain.player.getWeapon().getWidth(),AdventMain.player.getWeapon().getHeight(), true);
 				
-			//Grub Imaging:
-				
-			Image grubbyImageR = AdventMain.loadImage("res/GrubbyR.png");
-			Image grubbyImageR2 = AdventMain.loadImage("res/GrubbyR2.png");
-			Image grubbyImageR3 = AdventMain.loadImage("res/GrubbyR3.png");
-			Image grubbyImageR4 = AdventMain.loadImage("res/GrubbyR4.png");
-			Image grubbyImageR5 = AdventMain.loadImage("res/GrubbyR5.png");
-				
-			Grub.grubImageWidth = grubbyImageR.getWidth(null);
-			Grub.grubImageHeight = grubbyImageR.getHeight(null);
-				
-			Image grubbyImageL = AdventMain.loadImage("res/GrubbyL.png");
-			Image grubbyImageL2 = AdventMain.loadImage("res/GrubbyL2.png");
-			Image grubbyImageL3 = AdventMain.loadImage("res/GrubbyL3.png");
-			Image grubbyImageL4 = AdventMain.loadImage("res/GrubbyL4.png");
-			Image grubbyImageL5 = AdventMain.loadImage("res/GrubbyL5.png");
-				
-			Image grubbyImageU = AdventMain.loadImage("res/GrubbyU.png");
-			Image grubbyImageU2 = AdventMain.loadImage("res/GrubbyU2.png");
-			Image grubbyImageU3 = AdventMain.loadImage("res/GrubbyU3.png");
-			Image grubbyImageU4 = AdventMain.loadImage("res/GrubbyU4.png");
-			Image grubbyImageU5 = AdventMain.loadImage("res/GrubbyU5.png");
-				
-			Image grubbyImageD = AdventMain.loadImage("res/GrubbyD.png");
-			Image grubbyImageD2 = AdventMain.loadImage("res/GrubbyD2.png");
-			Image grubbyImageD3 = AdventMain.loadImage("res/GrubbyD3.png");
-			Image grubbyImageD4 = AdventMain.loadImage("res/GrubbyD4.png");
-			Image grubbyImageD5 = AdventMain.loadImage("res/GrubbyD5.png");
-				
-			AdventMain.grubIdleR = new Animation();
-			AdventMain.grubIdleR.addFrame(grubbyImageR, 500);
-			
-			AdventMain.grubIdleU = new Animation();
-			AdventMain.grubIdleU.addFrame(grubbyImageU, 500);
-			
-			AdventMain.grubIdleD = new Animation();
-			AdventMain.grubIdleD.addFrame(grubbyImageD, 500);
-				
-			AdventMain.grubIdleL = new Animation();
-			AdventMain.grubIdleL.addFrame(grubbyImageL, 500);
-				
-			AdventMain.grubMoveR = new Animation();
-			AdventMain.grubMoveR.addFrame(grubbyImageR, 200);
-			AdventMain.grubMoveR.addFrame(grubbyImageR4, 200);
-			AdventMain.grubMoveR.addFrame(grubbyImageR5, 200);
-			AdventMain.grubMoveR.addFrame(grubbyImageR4, 200);
-			AdventMain.grubMoveR.addFrame(grubbyImageR, 200);
-			AdventMain.grubMoveR.addFrame(grubbyImageR2, 200);
-			AdventMain.grubMoveR.addFrame(grubbyImageR3, 200);
-			AdventMain.grubMoveR.addFrame(grubbyImageR2, 200);
-			
-			AdventMain.grubMoveL = new Animation();
-			AdventMain.grubMoveL.addFrame(grubbyImageL, 200);
-			AdventMain.grubMoveL.addFrame(grubbyImageL4, 200);
-			AdventMain.grubMoveL.addFrame(grubbyImageL5, 200);
-			AdventMain.grubMoveL.addFrame(grubbyImageL4, 200);
-			AdventMain.grubMoveL.addFrame(grubbyImageL, 200);
-			AdventMain.grubMoveL.addFrame(grubbyImageL2, 200);
-			AdventMain.grubMoveL.addFrame(grubbyImageL3, 200);
-			AdventMain.grubMoveL.addFrame(grubbyImageL2, 200);
-			
-			AdventMain.grubMoveU = new Animation();
-			AdventMain.grubMoveU.addFrame(grubbyImageU, 200);
-			AdventMain.grubMoveU.addFrame(grubbyImageU4, 200);
-			AdventMain.grubMoveU.addFrame(grubbyImageU5, 200);
-			AdventMain.grubMoveU.addFrame(grubbyImageU4, 200);
-			AdventMain.grubMoveU.addFrame(grubbyImageU, 200);
-			AdventMain.grubMoveU.addFrame(grubbyImageU2, 200);
-			AdventMain.grubMoveU.addFrame(grubbyImageU3, 200);
-			AdventMain.grubMoveU.addFrame(grubbyImageU2, 200);
-				
-			AdventMain.grubMoveD = new Animation();
-			AdventMain.grubMoveD.addFrame(grubbyImageD, 200);
-			AdventMain.grubMoveD.addFrame(grubbyImageD4, 200);
-			AdventMain.grubMoveD.addFrame(grubbyImageD5, 200);
-			AdventMain.grubMoveD.addFrame(grubbyImageD4, 200);
-			AdventMain.grubMoveD.addFrame(grubbyImageD, 200);
-			AdventMain.grubMoveD.addFrame(grubbyImageD2, 200);
-			AdventMain.grubMoveD.addFrame(grubbyImageD3, 200);
-			AdventMain.grubMoveD.addFrame(grubbyImageD2, 200);
-				
-			//grubby = new Grub(grubAnim);
-			//grubby.setX(screen.getWidth() / 2);
-			//grubby.setY(screen.getHeight() / 2);
-				
 			//Wheat Imaging:
 			Image wheatImage = AdventMain.loadImage("res/Wheat.png");
 			Image wheatImage2 = AdventMain.loadImage("res/Wheat2.png");
@@ -390,18 +305,17 @@ public class CreatorMethods {
 			}
 				
 			//Grub Army Creation
+
+			Grub g = new Grub();
+			AdventMain.badArmy = new GrubArmy(g.grubImageWidth, g.grubImageHeight);
 			
-			AdventMain.badArmy = new GrubArmy(Grub.grubImageWidth, Grub.grubImageHeight);
-			
-			AdventMain.gStarters = new GrubStartLocation(AdventMain.screen.getWidth(), AdventMain.nineTenY, Grub.grubImageWidth, Grub.grubImageHeight);
-			for (int k = 0; k < AdventMain.numOfGrubby; k++)
-				AdventMain.badArmy.addGrub(AdventMain.createNormalGrub());
-				
-			for (int k = 0; k < AdventMain.badArmy.getSize(); k++)
-			{
+			AdventMain.gStarters = new GrubStartLocation(AdventMain.screen.getWidth(), AdventMain.nineTenY, g.grubImageWidth, g.grubImageHeight);
+			for (int k = 0; k < AdventMain.numOfGrubby; k++) {
+				Grub grub = new Grub();
+				AdventMain.badArmy.addGrub(grub);
 				AdventMain.gStarters.chooseLoc();
 				AdventMain.badArmy.setGrubLoc(k, AdventMain.gStarters.getX(), AdventMain.gStarters.getY());
-				AdventMain.badArmy.getGrub(k).setHealthBarSize(Grub.grubImageWidth);
+				AdventMain.badArmy.getGrub(k).setHealthBarSize(grub.grubImageWidth);
 			}
 				
 			//this is for the health bar outline later

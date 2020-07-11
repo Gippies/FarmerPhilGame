@@ -19,6 +19,9 @@ public class Sprite {
         this.anim = anim;
     }
 
+    public Sprite() {
+    }
+
     /**
         Updates this Sprite's Animation and its position based
         on the velocity.
