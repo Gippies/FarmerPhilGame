@@ -295,20 +295,6 @@ public class CreatorMethods {
             counter++;
         }
 
-        //Grub Army Creation
-
-        Grub g = new Grub();
-        AdventMain.badArmy = new GrubArmy(g.grubImageWidth, g.grubImageHeight);
-
-        AdventMain.gStarters = new GrubStartLocation(AdventMain.screen.getWidth(), AdventMain.nineTenY, g.grubImageWidth, g.grubImageHeight);
-        for (int k = 0; k < AdventMain.numOfGrubby; k++) {
-            Grub grub = new Grub();
-            AdventMain.badArmy.addGrub(grub);
-            AdventMain.gStarters.chooseLoc();
-            AdventMain.badArmy.setGrubLoc(k, AdventMain.gStarters.getX(), AdventMain.gStarters.getY());
-            AdventMain.badArmy.getGrub(k).setHealthBarSize(grub.grubImageWidth);
-        }
-
         //this is for the health bar outline later
         AdventMain.playerHBSize = (int) AdventMain.player.getHealth() * 3;
 

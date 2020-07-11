@@ -6,8 +6,8 @@ public class Sprite {
 
     protected Animation anim;
     // position (pixels)
-    private float x;
-    private float y;
+    protected float x;
+    protected float y;
     // velocity (pixels per millisecond)
     private float dx;
     private float dy;

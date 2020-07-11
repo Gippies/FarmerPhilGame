@@ -1,11 +1,19 @@
 package patt;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Cursor;
+import java.awt.Font;
+import java.awt.FontMetrics;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Polygon;
+import java.awt.Window;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
@@ -51,7 +59,8 @@ public class AdventMain extends GameCore {
     private double weaponEndTime;
     private boolean weaponToggle = false;
     private boolean attackReleased = true;
-
+    private List<Grub> grubs;
+    private GrubStartLocation gStarters;
 
     //These are fraction sizes of the screen to X or Y
     public static int twentyNineThirtyY,
@@ -76,8 +85,6 @@ public class AdventMain extends GameCore {
 
     public static Player player;
     public static WheatField field = new WheatField();
-    public static GrubArmy badArmy;
-    public static GrubStartLocation gStarters;
     public static int numOfGrubby = 10;
     protected GameAction pause;
     protected GameAction mouseClick;
@@ -104,12 +111,29 @@ public class AdventMain extends GameCore {
 
         createGameActions();
 
+        createGrubs();
         CreatorMethods.createSprites();
 
         try {
             startMoosic();
         } catch (LineUnavailableException e) {
             e.printStackTrace();
+        }
+    }
+
+    private void createGrubs() {
+        grubs = new ArrayList<>();
+        //Grub Army Creation
+
+        Grub g = new Grub();
+
+        gStarters = new GrubStartLocation(AdventMain.screen.getWidth(), AdventMain.nineTenY, g.grubImageWidth, g.grubImageHeight);
+        for (int k = 0; k < AdventMain.numOfGrubby; k++) {
+            Grub grub = new Grub();
+            grubs.add(grub);
+            gStarters.chooseLoc();
+            grub.setLocation(gStarters.getX(), gStarters.getY());
+            grub.setHealthBarSize(grub.grubImageWidth);
         }
     }
 
@@ -120,20 +144,15 @@ public class AdventMain extends GameCore {
         checkSystemInput();
 
         if (!gameOver && !isPaused && !isStart && !isShop) {
-            // check game input
             checkGameInput();
-            // update sprite
+
             player.update(elapsedTime);
-            //wheat update
-            //wheat.update(elapsedTime);
 
             for (int k = 0; k < field.getSize(); k++)
                 field.getWheat(k).update(elapsedTime);
 
-            //grubby.update(elapsedTime);
-            for (int k = 0; k < badArmy.getSize(); k++) {
-                //badArmy.updateGrub(k, elapsedTime);
-                badArmy.getGrub(k).update(elapsedTime);
+            for (Grub grub : grubs) {
+                grub.update(elapsedTime);
             }
         }
 
@@ -144,9 +163,9 @@ public class AdventMain extends GameCore {
 
         playerMotionUpdate();
 
-        for (int k = 0; k < badArmy.getSize(); k++) {
-            badArmy.getGrub(k).setOriginalVelocityX(badArmy.getGrub(k).getVelocityX());
-            badArmy.getGrub(k).setOriginalVelocityY(badArmy.getGrub(k).getVelocityY());
+        for (Grub grub : grubs) {
+            grub.setOriginalVelocityX(grub.getVelocityX());
+            grub.setOriginalVelocityY(grub.getVelocityY());
         }
 
         grubArmyThink();
@@ -172,8 +191,7 @@ public class AdventMain extends GameCore {
     }
 
     private void waveChangeStuff() {
-        //Also need to add wheat spawning?
-        if (badArmy.getSize() == 0) {
+        if (grubs.size() == 0) {
             waveNumber++;
             waveInfo.setText("Wave: " + waveNumber);
             numOfGrubby += 2;
@@ -186,10 +204,10 @@ public class AdventMain extends GameCore {
 
             for (int k = 0; k < numOfGrubby; k++) {
                 Grub grub = new Grub();
-                badArmy.addGrub(grub);
+                grubs.add(grub);
                 gStarters.chooseLoc();
-                badArmy.setGrubLoc(badArmy.getSize() - 1, gStarters.getX(), gStarters.getY());
-                badArmy.getGrub(badArmy.getSize() - 1).setHealthBarSize(grub.grubImageWidth);
+                grub.setLocation(gStarters.getX(), gStarters.getY());
+                grub.setHealthBarSize(grub.grubImageWidth);
             }
 
             isShop = true;
@@ -208,14 +226,14 @@ public class AdventMain extends GameCore {
     }
 
     private void grubWanderStuff() {
-        for (int k = 0; k < badArmy.getSize(); k++) {
-            if (badArmy.getGrub(k).isWander()) {
-                badArmy.getGrub(k).setVelocityX(badArmy.getGrub(k).getWanderVX());
-                badArmy.getGrub(k).setVelocityY(badArmy.getGrub(k).getWanderVY());
-                badArmy.getGrub(k).updateWander();
-                if (badArmy.getGrub(k).getWanderCounter() >= 100) {
-                    badArmy.getGrub(k).stopWander();
-                    badArmy.getGrub(k).resetWanderCounter();
+        for (Grub grub : grubs) {
+            if (grub.isWander()) {
+                grub.setVelocityX(grub.getWanderVX());
+                grub.setVelocityY(grub.getWanderVY());
+                grub.updateWander();
+                if (grub.getWanderCounter() >= 100) {
+                    grub.stopWander();
+                    grub.resetWanderCounter();
                 }
             }
         }
@@ -238,61 +256,66 @@ public class AdventMain extends GameCore {
     private void grubHealthUpdate() {
         //This is Grub losing health and Grub death for their Health Bar
         //This is also if the Grub lose their target
-        for (int k = 0; k < badArmy.getSize(); k++) {
-            badArmy.getGrub(k).setHealthBarSize((badArmy.getGrub(k).grubImageWidth * badArmy.getGrub(k).getHealth()) / 100);
-            if (badArmy.getGrub(k).hasTarget() && badArmy.getGrub(k).getTarget().getHealth() <= 0)
-                badArmy.getGrub(k).lostTarget();
-            if (badArmy.getGrub(k).getHealth() <= 0)
-                badArmy.deleteGrub(k);
+        List<Grub> grubsToRemove = new ArrayList<>();
+        for (Grub grub : grubs) {
+            grub.setHealthBarSize((grub.grubImageWidth * grub.getHealth()) / 100);
+            if (grub.hasTarget() && grub.getTarget().getHealth() <= 0)
+                grub.lostTarget();
+            if (grub.getHealth() <= 0)
+                grubsToRemove.add(grub);
+        }
+
+        for (Grub grub : grubsToRemove) {
+            grubs.remove(grub);
         }
 
     }
 
     private void grubChangeAnimation() {
-        for (int k = 0; k < badArmy.getSize(); k++)
-            if (badArmy.getGrub(k).getOriginalVelocityX() != badArmy.getGrub(k).getVelocityX()
-                    || badArmy.getGrub(k).getOriginalVelocityY() != badArmy.getGrub(k).getVelocityY())
-
-                if (badArmy.getGrub(k).getVelocityY() < 0)
-                    badArmy.getGrub(k).setMoveU();
-                else if (badArmy.getGrub(k).getVelocityY() > 0)
-                    badArmy.getGrub(k).setMoveD();
-                else if (badArmy.getGrub(k).getVelocityX() > 0)
-                    badArmy.getGrub(k).setMoveR();
-                else if (badArmy.getGrub(k).getVelocityX() < 0)
-                    badArmy.getGrub(k).setMoveL();
-                else if (badArmy.getGrub(k).getOriginalVelocityX() > 0)
-                    badArmy.getGrub(k).setIdleR();
-                else if (badArmy.getGrub(k).getOriginalVelocityX() < 0)
-                    badArmy.getGrub(k).setIdleL();
+        for (Grub grub : grubs) {
+            if (grub.getOriginalVelocityX() != grub.getVelocityX()
+                    || grub.getOriginalVelocityY() != grub.getVelocityY()) {
+                if (grub.getVelocityY() < 0)
+                    grub.setMoveU();
+                else if (grub.getVelocityY() > 0)
+                    grub.setMoveD();
+                else if (grub.getVelocityX() > 0)
+                    grub.setMoveR();
+                else if (grub.getVelocityX() < 0)
+                    grub.setMoveL();
+                else if (grub.getOriginalVelocityX() > 0)
+                    grub.setIdleR();
+                else if (grub.getOriginalVelocityX() < 0)
+                    grub.setIdleL();
                 else
-                    badArmy.getGrub(k).setIdleR();
-
+                    grub.setIdleR();
+            }
+        }
     }
 
     private void grubCollisionDetect() {
 
-        if (badArmy.getSize() > 0)
-            for (int k = 0; k < badArmy.getSize(); k++) {
+        if (grubs.size() > 0)
+            for (Grub grub : grubs) {
                 //This is grub-to-player collision detection, etc.
-                if (badArmy.grubColSprite(badArmy.getGrub(k), player)) {
-                    badArmy.getGrub(k).setVelocityX(0);
-                    badArmy.getGrub(k).setVelocityY(0);
+                if (grub.isColliding(player)) {
+                    grub.setVelocityX(0);
+                    grub.setVelocityY(0);
                     player.loseHealth(Grub.grubbyStrength);
                 }
 
                 //This is grub-to-player's-weapon collision detection
-                if (player.getWeapon().getActive() && badArmy.grubColSprite(badArmy.getGrub(k), player.getWeapon())) {
-                    badArmy.getGrub(k).loseHealth(player.getWeapon().getStrength());
+                if (player.getWeapon().getActive() && grub.isColliding(player.getWeapon())) {
+                    grub.loseHealth(player.getWeapon().getStrength());
                     if (player.getWeapon().equals("SprayCan")) {
-                        badArmy.getGrub(k).poison();
+                        grub.poison();
                     }
                 }
 
                 //This is grub-to-field-weapons collision detection
                 for (int j = 0; j < fieldWeapons.size(); j++) {
-                    if (badArmy.grubColSprite(badArmy.getGrub(k), fieldWeapons.get(j))) {
-                        badArmy.getGrub(k).loseHealth(fieldWeapons.get(j).getStrength());
+                    if (grub.isColliding(fieldWeapons.get(j))) {
+                        grub.loseHealth(fieldWeapons.get(j).getStrength());
 
                         springedBearTraps.add(setSpringedBearTrap(fieldWeapons.get(j).getX(), fieldWeapons.get(j).getY()));
                         fieldWeapons.remove(j);
@@ -300,18 +323,18 @@ public class AdventMain extends GameCore {
                 }
 
                 //This is grub-to-wheat collision detection
-                if (badArmy.getGrub(k).hasTarget())
-                    if (badArmy.grubColSprite(badArmy.getGrub(k), badArmy.getGrub(k).getTarget())) {
-                        badArmy.getGrub(k).setVelocityX(0);
-                        badArmy.getGrub(k).setVelocityY(0);
-                        badArmy.getGrub(k).getTarget().loseHealth(Grub.grubbyHunger);
+                if (grub.hasTarget())
+                    if (grub.isColliding(grub.getTarget())) {
+                        grub.setVelocityX(0);
+                        grub.setVelocityY(0);
+                        grub.getTarget().loseHealth(Grub.grubbyHunger);
                     }
 
                 //This is grub-to-grub collision detection
-                for (int j = k + 1; j < badArmy.getSize(); j++) {
-                    if (badArmy.grubColSprite(badArmy.getGrub(k), badArmy.getGrub(j)) && !badArmy.getGrub(j).isWander()) {
-                        badArmy.getGrub(j).startWander();
-                        badArmy.getGrub(j).lostTarget();
+                for (Grub grub2 : grubs) {
+                    if (grub != grub2 && grub.isColliding(grub2) && !grub2.isWander()) {
+                        grub2.startWander();
+                        grub2.lostTarget();
                     }
 
                 }
@@ -322,9 +345,9 @@ public class AdventMain extends GameCore {
 
     private void grubArmyThink() {
         //Grubby AI
-        for (int k = 0; k < badArmy.getSize(); k++) {
-            badArmy.getGrub(k).setMidGrubX();
-            badArmy.getGrub(k).setMidGrubY();
+        for (Grub grub : grubs) {
+            grub.setMidGrubX();
+            grub.setMidGrubY();
         }
         for (int k = 0; k < field.getSize(); k++) {
             field.getWheat(k).setMidWheatX();
@@ -340,49 +363,49 @@ public class AdventMain extends GameCore {
         float distanceAroundPlayer = 200;
 
         //This is for Grubby looking where to go
-        for (int k = 0; k < badArmy.getSize(); k++) {
+        for (Grub grub : grubs) {
 
 
             //This is finding a wheat for the grubby to eat :)
             if (field.getSize() != 0) {
-                if (!badArmy.getGrub(k).hasTarget()) {
-                    badArmy.getGrub(k).resetDistances();
+                if (!grub.hasTarget()) {
+                    grub.resetDistances();
                     for (int j = 0; j < field.getSize(); j++)
-                        badArmy.getGrub(k).addDistance(Math.sqrt(Math.pow(field.getWheat(j).getMidWheatX() - badArmy.getGrub(k).getMidGrubX(), 2) + Math.pow(field.getWheat(j).getMidWheatY() - badArmy.getGrub(k).getMidGrubY(), 2)));
+                        grub.addDistance(Math.sqrt(Math.pow(field.getWheat(j).getMidWheatX() - grub.getMidGrubX(), 2) + Math.pow(field.getWheat(j).getMidWheatY() - grub.getMidGrubY(), 2)));
 
                     double minimum = 999999;
                     int targetFinder = -1;
                     //Put a finding algorithm here.
-                    for (int l = 0; l < badArmy.getGrub(k).getNumOfDistances(); l++) {
-                        if (badArmy.getGrub(k).getDistance(l) < minimum) {
+                    for (int l = 0; l < grub.getNumOfDistances(); l++) {
+                        if (grub.getDistance(l) < minimum) {
                             targetFinder = l;
-                            minimum = badArmy.getGrub(k).getDistance(l);
+                            minimum = grub.getDistance(l);
                         }
                     }
 
                     if (targetFinder < field.getSize()) {
-                        badArmy.getGrub(k).setTarget(field.getWheat(targetFinder));
-                        badArmy.getGrub(k).foundTarget();
+                        grub.setTarget(field.getWheat(targetFinder));
+                        grub.foundTarget();
                     }
 
                 }
             }
 
 
-            if (((badArmy.getGrub(k).getMidGrubX() < midplayX + distanceAroundPlayer && badArmy.getGrub(k).getMidGrubX() > midplayX - distanceAroundPlayer)
-                    && (badArmy.getGrub(k).getMidGrubY() < midplayY + distanceAroundPlayer && badArmy.getGrub(k).getMidGrubY() > midplayY - distanceAroundPlayer))
+            if (((grub.getMidGrubX() < midplayX + distanceAroundPlayer && grub.getMidGrubX() > midplayX - distanceAroundPlayer)
+                    && (grub.getMidGrubY() < midplayY + distanceAroundPlayer && grub.getMidGrubY() > midplayY - distanceAroundPlayer))
                     || field.getSize() == 0) {
-                badArmy.getGrub(k).lostTarget();
-                badArmy.getGrub(k).setVelocityX(badArmy.getGrub(k).followPlayer(midplayX, badArmy.getGrub(k).getMidGrubX()));
-                badArmy.getGrub(k).setVelocityY(badArmy.getGrub(k).followPlayer(midplayY, badArmy.getGrub(k).getMidGrubY()));
-            } else if (badArmy.getGrub(k).hasTarget()) {
-                midTargetX = badArmy.getGrub(k).getTarget().getX() + (badArmy.getGrub(k).getTarget().getWidth() / 2);
-                midTargetY = badArmy.getGrub(k).getTarget().getY() + (badArmy.getGrub(k).getTarget().getHeight() / 2);
-                badArmy.getGrub(k).setVelocityX(badArmy.getGrub(k).followWheat(midTargetX, badArmy.getGrub(k).getMidGrubX()));
-                badArmy.getGrub(k).setVelocityY(badArmy.getGrub(k).followWheat(midTargetY, badArmy.getGrub(k).getMidGrubY()));
+                grub.lostTarget();
+                grub.setVelocityX(grub.followPlayer(midplayX, grub.getMidGrubX()));
+                grub.setVelocityY(grub.followPlayer(midplayY, grub.getMidGrubY()));
+            } else if (grub.hasTarget()) {
+                midTargetX = grub.getTarget().getX() + (grub.getTarget().getWidth() / 2);
+                midTargetY = grub.getTarget().getY() + (grub.getTarget().getHeight() / 2);
+                grub.setVelocityX(grub.followWheat(midTargetX, grub.getMidGrubX()));
+                grub.setVelocityY(grub.followWheat(midTargetY, grub.getMidGrubY()));
             } else {
-                badArmy.getGrub(k).setVelocityX(0);
-                badArmy.getGrub(k).setVelocityY(0);
+                grub.setVelocityX(0);
+                grub.setVelocityY(0);
             }
 
         }
@@ -761,20 +784,17 @@ public class AdventMain extends GameCore {
             g.drawImage(fieldWeapons.get(k).getImage(), (int) fieldWeapons.get(k).getX(), (int) fieldWeapons.get(k).getY(), null);
         }
 
-        //draw Grubby
-        g.setColor(Color.black);
-        //g.drawImage(grubby.getImage(),(int) grubby.getX(),(int) grubby.getY(), null);
-        for (int k = 0; k < badArmy.getSize(); k++)
-            g.drawImage(badArmy.getGrub(k).getImage(), (int) badArmy.getGrub(k).getX(), (int) badArmy.getGrub(k).getY(), null);
+        for (Grub grub : grubs) {
+            g.setColor(Color.black);
+            g.drawImage(grub.getImage(), (int) grub.getX(), (int) grub.getY(), null);
 
-        //draw Grubby Health Bar and Poison Icon
-        g.setColor(Color.red);
-        for (int k = 0; k < badArmy.getSize(); k++) {
-            if (badArmy.getGrub(k).getHealth() != 100)
-                g.fillRect((int) badArmy.getGrub(k).getX(), (int) (badArmy.getGrub(k).getY() - 5), (int) badArmy.getGrub(k).getHealthBarSize(), 5);
+            //draw Grubby Health Bar and Poison Icon
+            g.setColor(Color.red);
+            if (grub.getHealth() != 100)
+                g.fillRect((int) grub.getX(), (int) (grub.getY() - 5), (int) grub.getHealthBarSize(), 5);
 
-            if (badArmy.getGrub(k).isPoisoned())
-                g.drawImage(badArmy.getGrub(k).getPoisonIcon().getImage(), (int) badArmy.getGrub(k).getPoisonIcon().getX(), (int) badArmy.getGrub(k).getPoisonIcon().getY(), null);
+            if (grub.isPoisoned())
+                g.drawImage(grub.getPoisonIcon().getImage(), (int) grub.getPoisonIcon().getX(), (int) grub.getPoisonIcon().getY(), null);
         }
 
         //draw Wheat Health Bar

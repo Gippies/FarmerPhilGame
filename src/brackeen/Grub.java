@@ -47,12 +47,6 @@ public class Grub extends Sprite {
     private Animation stopD;
     private Animation stopU;
 
- /*    public Grub(Animation left, Animation right,
-        Animation deadLeft, Animation deadRight)
-    {
-        //super(left, right, deadLeft, deadRight);
-    }  */
-
     public Grub() {
         String[][] imagePaths = {
                 {"res/GrubbyR.png", "res/GrubbyR2.png", "res/GrubbyR3.png", "res/GrubbyR4.png", "res/GrubbyR5.png"},
@@ -149,6 +143,13 @@ public class Grub extends Sprite {
         } else {
             return 0;
         }
+    }
+
+    public boolean isColliding(Sprite s) {
+        return (x <= s.getX() + s.getWidth()
+                && x + getWidth() >= s.getX()
+                && y <= s.getY() + s.getHeight()
+                && y + getHeight() >= s.getY());
     }
 
     public double getHealth() {
@@ -293,6 +294,11 @@ public class Grub extends Sprite {
 
     public void setIdleD() {
         setAnim(stopD);
+    }
+
+    public void setLocation(float otherX, float otherY) {
+        x = otherX;
+        y = otherY;
     }
 
     public void setOriginalVelocityX(float vx) {
