@@ -2,72 +2,61 @@ package patt;
 
 import brackeen.*;
 
-public class Wheat extends Sprite{
-	
-	public static double costOfWheat = 50;
-	private double health;
-	private double healthBarSize;
-	private boolean isTarget;
-	private float midWheatX;
-	private float midWheatY;
+public class Wheat extends Sprite {
 
-	public Wheat(Animation anim) {
-		super(anim);
-		health = 100;
-	}
-	
-	public double getHealth()
-    {
-    	return health;
+    public static double costOfWheat = 50;
+    private double health;
+    private double healthBarSize;
+    private boolean isTarget;
+    private float midWheatX;
+    private float midWheatY;
+
+    public Wheat(Animation anim) {
+        super(anim);
+        health = 100;
     }
-    
-    public void setHealthBarSize(double x)
-    {
-    	healthBarSize = x;
+
+    public double getHealth() {
+        return health;
     }
-    
-    public double getHealthBarSize()
-    {
-    	return healthBarSize;
+
+    public void setHealthBarSize(double x) {
+        healthBarSize = x;
     }
-    
-    public void loseHealth(double x)
-    {
-    	health -= x;
+
+    public double getHealthBarSize() {
+        return healthBarSize;
     }
-    
-    public void Targeted()
-    {
-    	isTarget = true;
+
+    public void loseHealth(double x) {
+        health -= x;
     }
-    
-    public void lostTarget()
-    {
-    	isTarget = false;
+
+    public void Targeted() {
+        isTarget = true;
     }
-    
-    public boolean isATarget()
-    {
-    	return isTarget;
+
+    public void lostTarget() {
+        isTarget = false;
     }
-    
-    public void setMidWheatX()
-    {
-    	midWheatX = getX() + (getWidth() / 2);
+
+    public boolean isATarget() {
+        return isTarget;
     }
-    
-    public void setMidWheatY()
-    {
-    	midWheatY = getY() + (getHeight() / 2);
+
+    public void setMidWheatX() {
+        midWheatX = getX() + (getWidth() / 2);
     }
-    
-    public float getMidWheatX()
-    {
-    	return midWheatX;
+
+    public void setMidWheatY() {
+        midWheatY = getY() + (getHeight() / 2);
     }
-    
-    public float getMidWheatY()
-    {
-    	return midWheatY;
+
+    public float getMidWheatX() {
+        return midWheatX;
+    }
+
+    public float getMidWheatY() {
+        return midWheatY;
     }
 }

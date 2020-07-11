@@ -1,23 +1,23 @@
 package brackeen;
 
 /**
-    The GameAction class is an abstract to a user-initiated
-    action, like jumping or moving. GameActions can be mapped
-    to keys or the mouse with the InputManager.
-*/
+ * The GameAction class is an abstract to a user-initiated
+ * action, like jumping or moving. GameActions can be mapped
+ * to keys or the mouse with the InputManager.
+ */
 public class GameAction {
 
     /**
-        Normal behavior. The isPressed() method returns true
-        as long as the key is held down.
-    */
+     * Normal behavior. The isPressed() method returns true
+     * as long as the key is held down.
+     */
     public static final int NORMAL = 0;
 
     /**
-        Initial press behavior. The isPressed() method returns
-        true only after the key is first pressed, and not again
-        until the key is released and pressed again.
-    */
+     * Initial press behavior. The isPressed() method returns
+     * true only after the key is first pressed, and not again
+     * until the key is released and pressed again.
+     */
     public static final int DETECT_INITAL_PRESS_ONLY = 1;
 
     private static final int STATE_RELEASED = 0;
@@ -30,16 +30,16 @@ public class GameAction {
     private int state;
 
     /**
-        Create a new GameAction with the NORMAL behavior.
-    */
+     * Create a new GameAction with the NORMAL behavior.
+     */
     public GameAction(String name) {
         this(name, NORMAL);
     }
 
 
     /**
-        Create a new GameAction with the specified behavior.
-    */
+     * Create a new GameAction with the specified behavior.
+     */
     public GameAction(String name, int behavior) {
         this.name = name;
         this.behavior = behavior;
@@ -48,17 +48,17 @@ public class GameAction {
 
 
     /**
-        Gets the name of this GameAction.
-    */
+     * Gets the name of this GameAction.
+     */
     public String getName() {
         return name;
     }
 
 
     /**
-        Resets this GameAction so that it appears like it hasn't
-        been pressed.
-    */
+     * Resets this GameAction so that it appears like it hasn't
+     * been pressed.
+     */
     public void reset() {
         state = STATE_RELEASED;
         amount = 0;
@@ -66,9 +66,9 @@ public class GameAction {
 
 
     /**
-        Taps this GameAction. Same as calling press() followed
-        by release().
-    */
+     * Taps this GameAction. Same as calling press() followed
+     * by release().
+     */
     public synchronized void tap() {
         press();
         release();
@@ -76,53 +76,53 @@ public class GameAction {
 
 
     /**
-        Signals that the key was pressed.
-    */
+     * Signals that the key was pressed.
+     */
     public synchronized void press() {
         press(1);
     }
 
 
     /**
-        Signals that the key was pressed a specified number of
-        times, or that the mouse move a spcified distance.
-    */
+     * Signals that the key was pressed a specified number of
+     * times, or that the mouse move a spcified distance.
+     */
     public synchronized void press(int amount) {
         if (state != STATE_WAITING_FOR_RELEASE) {
-            this.amount+=amount;
+            this.amount += amount;
             state = STATE_PRESSED;
         }
 
     }
+
     /**
-        Signals that the key was released
-    */
+     * Signals that the key was released
+     */
     public synchronized void release() {
         state = STATE_RELEASED;
     }
 
 
     /**
-        Returns whether the key was pressed or not since last
-        checked.
-    */
+     * Returns whether the key was pressed or not since last
+     * checked.
+     */
     public synchronized boolean isPressed() {
         return (getAmount() != 0);
     }
 
 
     /**
-        For keys, this is the number of times the key was
-        pressed since it was last checked.
-        For mouse movement, this is the distance moved.
-    */
+     * For keys, this is the number of times the key was
+     * pressed since it was last checked.
+     * For mouse movement, this is the distance moved.
+     */
     public synchronized int getAmount() {
         int retVal = amount;
         if (retVal != 0) {
             if (state == STATE_RELEASED) {
                 amount = 0;
-            }
-            else if (behavior == DETECT_INITAL_PRESS_ONLY) {
+            } else if (behavior == DETECT_INITAL_PRESS_ONLY) {
                 state = STATE_WAITING_FOR_RELEASE;
                 amount = 0;
             }

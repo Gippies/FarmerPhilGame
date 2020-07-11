@@ -5,9 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
-    The Animation class manages a series of images (frames) and
-    the amount of time to display each frame.
-*/
+ * The Animation class manages a series of images (frames) and
+ * the amount of time to display each frame.
+ */
 public class Animation {
 
     private ArrayList<AnimFrame> frames;
@@ -17,8 +17,8 @@ public class Animation {
 
 
     /**
-        Creates a new, empty Animation.
-    */
+     * Creates a new, empty Animation.
+     */
     public Animation() {
         this(new ArrayList<AnimFrame>(), 0);
     }
@@ -29,37 +29,33 @@ public class Animation {
         this.totalDuration = totalDuration;
         start();
     }
-    
-    public String toString()
-    {
-    	return String.valueOf(frames.size());
+
+    public String toString() {
+        return String.valueOf(frames.size());
     }
-    
-    public void setAllFrameSizes(int w, int h, int i)
-    {
-    	for (int k = 0; k < frames.size(); k++)
-    	{
-    		frames.get(k).setImageSize(w, h, i);
-    	}
+
+    public void setAllFrameSizes(int w, int h, int i) {
+        for (int k = 0; k < frames.size(); k++) {
+            frames.get(k).setImageSize(w, h, i);
+        }
     }
 
 
     /**
-        Creates a duplicate of this animation. The list of frames
-        are shared between the two Animations, but each Animation
-        can be animated independently.
-    */
+     * Creates a duplicate of this animation. The list of frames
+     * are shared between the two Animations, but each Animation
+     * can be animated independently.
+     */
     public Animation clone() {
         return new Animation(frames, totalDuration);
     }
 
 
     /**
-        Adds an image to the animation with the specified
-        duration (time to display the image).
-    */
-    public synchronized void addFrame(Image image, long duration)
-    {
+     * Adds an image to the animation with the specified
+     * duration (time to display the image).
+     */
+    public synchronized void addFrame(Image image, long duration) {
         totalDuration += duration;
         frames.add(new AnimFrame(image, totalDuration));
     }
@@ -72,10 +68,9 @@ public class Animation {
     }
 
 
-
     /**
-        Starts this animation over from the beginning.
-    */
+     * Starts this animation over from the beginning.
+     */
     public synchronized void start() {
         animTime = 0;
         currFrameIndex = 0;
@@ -83,9 +78,9 @@ public class Animation {
 
 
     /**
-        Updates this animation's current image (frame), if
-        neccesary.
-    */
+     * Updates this animation's current image (frame), if
+     * neccesary.
+     */
     public synchronized void update(long elapsedTime) {
         if (frames.size() > 1) {
             animTime += elapsedTime;
@@ -98,28 +93,27 @@ public class Animation {
             while (animTime > getFrame(currFrameIndex).endTime) {
                 currFrameIndex++;
             }
-        } 
-    	
-    	
+        }
+
+
     }
 
 
     /**
-        Gets this Animation's current image. Returns null if this
-        animation has no images.
-    */
+     * Gets this Animation's current image. Returns null if this
+     * animation has no images.
+     */
     public synchronized Image getImage() {
         if (frames.size() == 0) {
             return null;
-        }
-        else {
+        } else {
             return getFrame(currFrameIndex).image;
         }
     }
 
 
     private AnimFrame getFrame(int i) {
-        return (AnimFrame)frames.get(i);
+        return (AnimFrame) frames.get(i);
     }
 
 
@@ -132,10 +126,9 @@ public class Animation {
             this.image = image;
             this.endTime = endTime;
         }
-        
-        public void setImageSize(int w, int h, int i)
-        {
-        	image = image.getScaledInstance(w, h, i);
+
+        public void setImageSize(int w, int h, int i) {
+            image = image.getScaledInstance(w, h, i);
         }
     }
 }
