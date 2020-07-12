@@ -111,8 +111,8 @@ public class AdventMain extends GameCore {
 
         createGameActions();
 
-        createGrubs();
         CreatorMethods.createSprites();
+        createGrubs();
 
         try {
             startMoosic();
