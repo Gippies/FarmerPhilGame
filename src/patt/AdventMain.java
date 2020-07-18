@@ -6,6 +6,7 @@ import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.Polygon;
 import java.awt.Window;
 import java.awt.event.KeyEvent;
@@ -59,6 +60,7 @@ public class AdventMain extends GameCore {
     private double weaponEndTime;
     private boolean weaponToggle = false;
     private boolean attackReleased = true;
+    private List<Wheat> wheats;
     private List<Grub> grubs;
     private GrubStartLocation gStarters;
 
@@ -84,7 +86,6 @@ public class AdventMain extends GameCore {
 
 
     public static Player player;
-    public static WheatField field = new WheatField();
     public static int numOfGrubby = 10;
     protected GameAction pause;
     protected GameAction mouseClick;
@@ -112,6 +113,7 @@ public class AdventMain extends GameCore {
         createGameActions();
 
         CreatorMethods.createSprites();
+        createWheatField();
         createGrubs();
 
         try {
@@ -137,6 +139,87 @@ public class AdventMain extends GameCore {
         }
     }
 
+    private void createWheatField() {
+        wheats = new ArrayList<>();
+
+        //Wheat Imaging:
+        Image wheatImage = AdventMain.loadImage("res/Wheat.png");
+        Image wheatImage2 = AdventMain.loadImage("res/Wheat2.png");
+        Image wheatImage3 = AdventMain.loadImage("res/Wheat3.png");
+        Image wheatImage4 = AdventMain.loadImage("res/Wheat4.png");
+        Image wheatImage5 = AdventMain.loadImage("res/Wheat5.png");
+
+        AdventMain.wheatHealthMax = wheatImage.getWidth(null);
+
+        AdventMain.wheatAnim = new Animation();
+        AdventMain.wheatAnim.addFrame(wheatImage, 20000);
+        AdventMain.wheatAnim.addFrame(wheatImage2, 20000);
+        AdventMain.wheatAnim.addFrame(wheatImage4, 20000);
+        AdventMain.wheatAnim.addFrame(wheatImage2, 20000);
+        AdventMain.wheatAnim.addFrame(wheatImage, 20000);
+        AdventMain.wheatAnim.addFrame(wheatImage3, 20000);
+        AdventMain.wheatAnim.addFrame(wheatImage5, 20000);
+        AdventMain.wheatAnim.addFrame(wheatImage3, 20000);
+
+        //wheat creation
+        float oxLoc = AdventMain.oneFourthRight;
+        float oyLoc = AdventMain.oneFourthDown;
+        float rightOfWheat = 0;
+        float bottomOfWheat;
+        int horizontalWheat = 0;
+        int verticalWheat = 0;
+        boolean h = false;
+        int counter = 0;
+
+        while (oyLoc + wheatImage.getHeight(null) < AdventMain.oneFourthUp) {
+            wheats.add(new Wheat(wheatAnim));
+            wheats.get(counter).setX(oxLoc);
+            wheats.get(counter).setY(oyLoc);
+            oxLoc += wheatImage.getWidth(null);
+            if (!h)
+                horizontalWheat++;
+            if (oxLoc >= AdventMain.oneFourthLeft - wheatImage.getWidth(null)) {
+                h = true;
+                rightOfWheat = oxLoc;
+                oxLoc = AdventMain.oneFourthRight;
+                verticalWheat++;
+                oyLoc += wheatImage.getHeight(null);
+            }
+            counter++;
+        }
+
+        bottomOfWheat = oyLoc;
+
+        //Center Wheat in Field
+        float rightDifference = AdventMain.oneFourthLeft - rightOfWheat;
+        float bottomDifference = AdventMain.oneFourthUp - bottomOfWheat;
+
+        rightDifference /= 2;
+        bottomDifference /= 2;
+
+        oxLoc = AdventMain.oneFourthRight + rightDifference;
+        oyLoc = AdventMain.oneFourthDown + bottomDifference;
+
+        int cHWheat = 0;
+        int cVWheat = 0;
+        counter = 0;
+
+        while (cVWheat < verticalWheat) {
+            wheats.get(counter).setX(oxLoc);
+            wheats.get(counter).setY(oyLoc);
+            wheats.get(counter).setHealthBarSize(wheatImage.getWidth(null));
+            oxLoc += wheatImage.getWidth(null);
+            cHWheat++;
+            if (cHWheat == horizontalWheat) {
+                cHWheat = 0;
+                cVWheat++;
+                oxLoc = AdventMain.oneFourthRight + rightDifference;
+                oyLoc += wheatImage.getHeight(null);
+            }
+            counter++;
+        }
+    }
+
     @Override
     public void update(long elapsedTime) {
         // check input that can happen whether paused or not
@@ -148,8 +231,9 @@ public class AdventMain extends GameCore {
 
             player.update(elapsedTime);
 
-            for (int k = 0; k < field.getSize(); k++)
-                field.getWheat(k).update(elapsedTime);
+            for (Wheat wheat : wheats) {
+                wheat.update(elapsedTime);
+            }
 
             for (Grub grub : grubs) {
                 grub.update(elapsedTime);
@@ -196,8 +280,8 @@ public class AdventMain extends GameCore {
             waveInfo.setText("Wave: " + waveNumber);
             numOfGrubby += 2;
 
-            if (field.getSize() > 0) {
-                moneyNumber += (field.getSize() * Wheat.costOfWheat);
+            if (wheats.size() > 0) {
+                moneyNumber += (wheats.size() * Wheat.costOfWheat);
                 DecimalFormat mf = new DecimalFormat("$#,###,##0.00");
                 moneyInfo.setText("Money: " + mf.format(moneyNumber));
             }
@@ -242,15 +326,17 @@ public class AdventMain extends GameCore {
 
     private void wheatHealthUpdate() {
         //This is for Wheat losing health and dying
-        for (int k = 0; k < field.getSize(); k++) {
-            field.getWheat(k).setHealthBarSize((wheatHealthMax * field.getWheat(k).getHealth()) / 100);
-            if (field.getWheat(k).getHealth() <= 0) {
-                LocationCapture.addLocation(field.getWheat(k).getX(), field.getWheat(k).getY());
-                field.deleteWheat(k);
+        List<Wheat> wheatsToRemove = new ArrayList<>();
+        for (Wheat wheat : wheats) {
+            wheat.setHealthBarSize((wheatHealthMax * wheat.getHealth()) / 100);
+            if (wheat.getHealth() <= 0) {
+                LocationCapture.addLocation(wheat.getX(), wheat.getY());
+                wheatsToRemove.add(wheat);
             }
-
         }
-
+        for (Wheat wheat : wheatsToRemove) {
+            wheats.remove(wheat);
+        }
     }
 
     private void grubHealthUpdate() {
@@ -349,9 +435,9 @@ public class AdventMain extends GameCore {
             grub.setMidGrubX();
             grub.setMidGrubY();
         }
-        for (int k = 0; k < field.getSize(); k++) {
-            field.getWheat(k).setMidWheatX();
-            field.getWheat(k).setMidWheatY();
+        for (Wheat wheat : wheats) {
+            wheat.setMidWheatX();
+            wheat.setMidWheatY();
         }
 
 
@@ -367,11 +453,11 @@ public class AdventMain extends GameCore {
 
 
             //This is finding a wheat for the grubby to eat :)
-            if (field.getSize() != 0) {
+            if (wheats.size() != 0) {
                 if (!grub.hasTarget()) {
                     grub.resetDistances();
-                    for (int j = 0; j < field.getSize(); j++)
-                        grub.addDistance(Math.sqrt(Math.pow(field.getWheat(j).getMidWheatX() - grub.getMidGrubX(), 2) + Math.pow(field.getWheat(j).getMidWheatY() - grub.getMidGrubY(), 2)));
+                    for (Wheat wheat : wheats)
+                        grub.addDistance(Math.sqrt(Math.pow(wheat.getMidWheatX() - grub.getMidGrubX(), 2) + Math.pow(wheat.getMidWheatY() - grub.getMidGrubY(), 2)));
 
                     double minimum = 999999;
                     int targetFinder = -1;
@@ -383,8 +469,8 @@ public class AdventMain extends GameCore {
                         }
                     }
 
-                    if (targetFinder < field.getSize()) {
-                        grub.setTarget(field.getWheat(targetFinder));
+                    if (targetFinder < wheats.size()) {
+                        grub.setTarget(wheats.get(targetFinder));
                         grub.foundTarget();
                     }
 
@@ -394,7 +480,7 @@ public class AdventMain extends GameCore {
 
             if (((grub.getMidGrubX() < midplayX + distanceAroundPlayer && grub.getMidGrubX() > midplayX - distanceAroundPlayer)
                     && (grub.getMidGrubY() < midplayY + distanceAroundPlayer && grub.getMidGrubY() > midplayY - distanceAroundPlayer))
-                    || field.getSize() == 0) {
+                    || wheats.size() == 0) {
                 grub.lostTarget();
                 grub.setVelocityX(grub.followPlayer(midplayX, grub.getMidGrubX()));
                 grub.setVelocityY(grub.followPlayer(midplayY, grub.getMidGrubY()));
@@ -620,8 +706,10 @@ public class AdventMain extends GameCore {
                     moneyNumber -= (Wheat.costOfWheat * 2);
                     DecimalFormat mf = new DecimalFormat("$#,###,##0.00");
                     moneyInfo.setText("Money: " + mf.format(moneyNumber));
-                    field.addWheat(new Wheat(wheatAnim));
-                    field.setWheatLoc(field.getSize() - 1, LocationCapture.getLocX(counter - 1), LocationCapture.getLocY(counter - 1));
+                    Wheat wheat = new Wheat(wheatAnim);
+                    wheats.add(wheat);
+                    wheat.setX(LocationCapture.getLocX(counter - 1));
+                    wheat.setY(LocationCapture.getLocY(counter - 1));
                     LocationCapture.deleteLastLoc();
                 }
                 counter--;
@@ -771,8 +859,8 @@ public class AdventMain extends GameCore {
 
         //Draw Wheat
         g.setColor(Color.black);
-        for (int k = 0; k < field.getSize(); k++)
-            g.drawImage(field.getWheat(k).getImage(), (int) field.getWheat(k).getX(), (int) field.getWheat(k).getY(), null);
+        for (Wheat wheat : wheats)
+            g.drawImage(wheat.getImage(), (int) wheat.getX(), (int) wheat.getY(), null);
 
         //Draw Springed Bear Traps
         for (int k = 0; k < springedBearTraps.size(); k++) {
@@ -799,9 +887,9 @@ public class AdventMain extends GameCore {
 
         //draw Wheat Health Bar
         g.setColor(Color.blue);
-        for (int k = 0; k < field.getSize(); k++) {
-            if (field.getWheat(k).getHealth() != 100)
-                g.fillRect((int) field.getWheat(k).getX(), (int) (field.getWheat(k).getY() - 5), (int) field.getWheat(k).getHealthBarSize(), 5);
+        for (Wheat wheat : wheats) {
+            if (wheat.getHealth() != 100)
+                g.fillRect((int) wheat.getX(), (int) (wheat.getY() - 5), (int) wheat.getHealthBarSize(), 5);
         }
 
         // draw player and Weapon
