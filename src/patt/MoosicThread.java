@@ -35,7 +35,7 @@ public class MoosicThread extends Thread {
     }
 
     public boolean isSongDone() {
-        return clip.getFramePosition() >= clip.getFrameLength() - 10;
+        return clip.getFramePosition() >= clip.getFrameLength();
     }
 
 }

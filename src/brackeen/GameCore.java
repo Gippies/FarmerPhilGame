@@ -1,6 +1,8 @@
 package brackeen;
 
 import java.awt.*;
+import java.util.HashMap;
+import java.util.Map;
 import javax.swing.ImageIcon;
 
 /**
@@ -26,6 +28,7 @@ public abstract class GameCore {
             new DisplayMode(1024, 768, 32, 0),
             new DisplayMode(1024, 768, 24, 0), */};
 
+    private static final Map<String, Image> imageMap = new HashMap<>();
     private boolean isRunning;
     public static ScreenManager screen;
 
@@ -89,7 +92,10 @@ public abstract class GameCore {
     }
 
     public static Image loadImage(String fileName) {
-        return new ImageIcon(fileName).getImage();
+        if (!imageMap.containsKey(fileName)) {
+            imageMap.put(fileName, new ImageIcon(fileName).getImage());
+        }
+        return imageMap.get(fileName);
     }
 
     /**
