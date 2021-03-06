@@ -863,13 +863,13 @@ public class AdventMain extends GameCore {
             g.drawImage(wheat.getImage(), (int) wheat.getX(), (int) wheat.getY(), null);
 
         //Draw Springed Bear Traps
-        for (int k = 0; k < springedBearTraps.size(); k++) {
-            g.drawImage(springedBearTraps.get(k).getImage(), (int) springedBearTraps.get(k).getX(), (int) springedBearTraps.get(k).getY(), null);
+        for (Sprite springedBearTrap : springedBearTraps) {
+            g.drawImage(springedBearTrap.getImage(), (int) springedBearTrap.getX(), (int) springedBearTrap.getY(), null);
         }
 
         //Draw Field Weapons
-        for (int k = 0; k < fieldWeapons.size(); k++) {
-            g.drawImage(fieldWeapons.get(k).getImage(), (int) fieldWeapons.get(k).getX(), (int) fieldWeapons.get(k).getY(), null);
+        for (Weapon fieldWeapon : fieldWeapons) {
+            g.drawImage(fieldWeapon.getImage(), (int) fieldWeapon.getX(), (int) fieldWeapon.getY(), null);
         }
 
         for (Grub grub : grubs) {
