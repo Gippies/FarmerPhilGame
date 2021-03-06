@@ -229,23 +229,23 @@ public class CreatorMethods {
         Image pauseCImage = pauseCrop.getImage();
         Image startCImage = startCrop.getImage();
         Image shopCImage = new ImageIcon("res/shopBrick.png").getImage();
-        AdventMain.pauseMenu = new MyGui(pauseCImage, AdventMain.twoFifthX, AdventMain.fiveSixtY, AdventMain.threeFifthX - AdventMain.twoFifthX, AdventMain.elevenSixtY - AdventMain.fiveSixtY, "Paused");
-        AdventMain.startMenu = new MyGui(startCImage, AdventMain.oneTwentyX, AdventMain.oneTwentyY, AdventMain.nineteenTwentyX - AdventMain.oneTwentyX, AdventMain.nineteenTwentyY - AdventMain.oneTwentyY, "Instructions");
-        AdventMain.shopMenu = new MyGui(shopCImage, AdventMain.twoFifthX, AdventMain.fiveSixtY, AdventMain.threeFifthX - AdventMain.twoFifthX, AdventMain.elevenSixtY - AdventMain.fiveSixtY, "Shop");
+        AdventMain.pauseMenu = new Gui(pauseCImage, AdventMain.twoFifthX, AdventMain.fiveSixtY, AdventMain.threeFifthX - AdventMain.twoFifthX, AdventMain.elevenSixtY - AdventMain.fiveSixtY, "Paused");
+        AdventMain.startMenu = new Gui(startCImage, AdventMain.oneTwentyX, AdventMain.oneTwentyY, AdventMain.nineteenTwentyX - AdventMain.oneTwentyX, AdventMain.nineteenTwentyY - AdventMain.oneTwentyY, "Instructions");
+        AdventMain.shopMenu = new Gui(shopCImage, AdventMain.twoFifthX, AdventMain.fiveSixtY, AdventMain.threeFifthX - AdventMain.twoFifthX, AdventMain.elevenSixtY - AdventMain.fiveSixtY, "Shop");
 
 
         //TODO Make the new buttons relative to the screen size and labels
-        MyButt btnClose = new MyButt(((AdventMain.twoFifthX + AdventMain.threeFifthX) / 2) - MyButt.BUTTON_WIDTH / 2, (AdventMain.elevenSixtY * 5) / 6, MyButt.BUTTON_WIDTH, MyButt.BUTTON_HEIGHT, "Quit", "Close");
-        MyButt btnShopCont = new MyButt(((AdventMain.twoFifthX + AdventMain.threeFifthX) / 2) - MyButt.BUTTON_WIDTH / 2, ((AdventMain.elevenSixtY * 4) / 6) + 150, MyButt.BUTTON_WIDTH, MyButt.BUTTON_HEIGHT, "Continue", "ShopCont");
-        MyButt btnBuyTractor = new MyButt(((AdventMain.twoFifthX + AdventMain.threeFifthX) / 2) - MyButt.BUTTON_WIDTH / 2, ((AdventMain.elevenSixtY * 4) / 6) + 100, MyButt.BUTTON_WIDTH, MyButt.BUTTON_HEIGHT, "Tractor $5000", "BuyTractor");
-        MyButt btnHealthAdder = new MyButt(((AdventMain.twoFifthX + AdventMain.threeFifthX) / 2) - MyButt.BUTTON_WIDTH / 2, (AdventMain.elevenSixtY * 4) / 6, MyButt.BUTTON_WIDTH, MyButt.BUTTON_HEIGHT, "+25 Health for $500", "HealthAdder");
-        MyButt btnBuyField = new MyButt(((AdventMain.twoFifthX + AdventMain.threeFifthX) / 2) - MyButt.BUTTON_WIDTH / 2, ((AdventMain.elevenSixtY * 4) / 6) - 50, MyButt.BUTTON_WIDTH, MyButt.BUTTON_HEIGHT, "Replant Field", "BuyField");
-        MyButt btnBuySpray = new MyButt(((AdventMain.twoFifthX + AdventMain.threeFifthX) / 2) - MyButt.BUTTON_WIDTH / 2, ((AdventMain.elevenSixtY * 4) / 6) - 100, MyButt.BUTTON_WIDTH, MyButt.BUTTON_HEIGHT, "Spray Can $2000", "BuySprayCan");
-        MyButt btnBuyBearTraps = new MyButt(((AdventMain.twoFifthX + AdventMain.threeFifthX) / 2) - MyButt.BUTTON_WIDTH / 2, ((AdventMain.elevenSixtY * 4) / 6) + 50, MyButt.BUTTON_WIDTH, MyButt.BUTTON_HEIGHT, "Bear Traps $1000", "BuyBearTraps");
-        MyButt btnStartCont = new MyButt(((AdventMain.oneTwentyX + AdventMain.nineteenTwentyX) / 2) - MyButt.BUTTON_WIDTH / 2, (AdventMain.nineteenTwentyY * 9) / 10, MyButt.BUTTON_WIDTH, MyButt.BUTTON_HEIGHT, "Continue", "StartCont");
-        MyButt btnStartHardM = new MyButt(((AdventMain.oneTwentyX + AdventMain.nineteenTwentyX) / 2) - (MyButt.BUTTON_WIDTH / 2) - 300, (AdventMain.nineteenTwentyY * 9) / 10, MyButt.BUTTON_WIDTH, MyButt.BUTTON_HEIGHT, "Hard", "StartHardM");
-        MyButt btnStartMediumM = new MyButt(((AdventMain.oneTwentyX + AdventMain.nineteenTwentyX) / 2) - (MyButt.BUTTON_WIDTH / 2) - 300, ((AdventMain.nineteenTwentyY * 9) / 10) - 50, MyButt.BUTTON_WIDTH, MyButt.BUTTON_HEIGHT, "Medium", "StartMediumM");
-        MyButt btnStartEasyM = new MyButt(((AdventMain.oneTwentyX + AdventMain.nineteenTwentyX) / 2) - (MyButt.BUTTON_WIDTH / 2) - 300, ((AdventMain.nineteenTwentyY * 9) / 10) - 100, MyButt.BUTTON_WIDTH, MyButt.BUTTON_HEIGHT, "Easy", "StartEasyM");
+        Button btnClose = new Button(((AdventMain.twoFifthX + AdventMain.threeFifthX) / 2) - Button.BUTTON_WIDTH / 2, (AdventMain.elevenSixtY * 5) / 6, Button.BUTTON_WIDTH, Button.BUTTON_HEIGHT, "Quit", "Close");
+        Button btnShopCont = new Button(((AdventMain.twoFifthX + AdventMain.threeFifthX) / 2) - Button.BUTTON_WIDTH / 2, ((AdventMain.elevenSixtY * 4) / 6) + 150, Button.BUTTON_WIDTH, Button.BUTTON_HEIGHT, "Continue", "ShopCont");
+        Button btnBuyTractor = new Button(((AdventMain.twoFifthX + AdventMain.threeFifthX) / 2) - Button.BUTTON_WIDTH / 2, ((AdventMain.elevenSixtY * 4) / 6) + 100, Button.BUTTON_WIDTH, Button.BUTTON_HEIGHT, "Tractor $5000", "BuyTractor");
+        Button btnHealthAdder = new Button(((AdventMain.twoFifthX + AdventMain.threeFifthX) / 2) - Button.BUTTON_WIDTH / 2, (AdventMain.elevenSixtY * 4) / 6, Button.BUTTON_WIDTH, Button.BUTTON_HEIGHT, "+25 Health for $500", "HealthAdder");
+        Button btnBuyField = new Button(((AdventMain.twoFifthX + AdventMain.threeFifthX) / 2) - Button.BUTTON_WIDTH / 2, ((AdventMain.elevenSixtY * 4) / 6) - 50, Button.BUTTON_WIDTH, Button.BUTTON_HEIGHT, "Replant Field", "BuyField");
+        Button btnBuySpray = new Button(((AdventMain.twoFifthX + AdventMain.threeFifthX) / 2) - Button.BUTTON_WIDTH / 2, ((AdventMain.elevenSixtY * 4) / 6) - 100, Button.BUTTON_WIDTH, Button.BUTTON_HEIGHT, "Spray Can $2000", "BuySprayCan");
+        Button btnBuyBearTraps = new Button(((AdventMain.twoFifthX + AdventMain.threeFifthX) / 2) - Button.BUTTON_WIDTH / 2, ((AdventMain.elevenSixtY * 4) / 6) + 50, Button.BUTTON_WIDTH, Button.BUTTON_HEIGHT, "Bear Traps $1000", "BuyBearTraps");
+        Button btnStartCont = new Button(((AdventMain.oneTwentyX + AdventMain.nineteenTwentyX) / 2) - Button.BUTTON_WIDTH / 2, (AdventMain.nineteenTwentyY * 9) / 10, Button.BUTTON_WIDTH, Button.BUTTON_HEIGHT, "Continue", "StartCont");
+        Button btnStartHardM = new Button(((AdventMain.oneTwentyX + AdventMain.nineteenTwentyX) / 2) - (Button.BUTTON_WIDTH / 2) - 300, (AdventMain.nineteenTwentyY * 9) / 10, Button.BUTTON_WIDTH, Button.BUTTON_HEIGHT, "Hard", "StartHardM");
+        Button btnStartMediumM = new Button(((AdventMain.oneTwentyX + AdventMain.nineteenTwentyX) / 2) - (Button.BUTTON_WIDTH / 2) - 300, ((AdventMain.nineteenTwentyY * 9) / 10) - 50, Button.BUTTON_WIDTH, Button.BUTTON_HEIGHT, "Medium", "StartMediumM");
+        Button btnStartEasyM = new Button(((AdventMain.oneTwentyX + AdventMain.nineteenTwentyX) / 2) - (Button.BUTTON_WIDTH / 2) - 300, ((AdventMain.nineteenTwentyY * 9) / 10) - 100, Button.BUTTON_WIDTH, Button.BUTTON_HEIGHT, "Easy", "StartEasyM");
 
         MyLabel lblWASD = new MyLabel(100, 200, "Use the WASD keys to Move Around the Field. Spacebar to attack.");
         MyLabel lblExplain = new MyLabel(100, 400, "The Grubs are bad, they are trying to eat your crops!! Stop them before they eat your field!");

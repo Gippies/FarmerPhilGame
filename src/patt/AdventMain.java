@@ -34,9 +34,9 @@ public class AdventMain extends GameCore {
     public static Polygon blackRect;
     //private Polygon farmLand;
     public static int wheatHealthMax;
-    public static MyGui startMenu;
-    public static MyGui pauseMenu;
-    public static MyGui shopMenu;
+    public static Gui startMenu;
+    public static Gui pauseMenu;
+    public static Gui shopMenu;
     private MoosicThread musicThr;
     public static ArrayList<Sprite> grassGrid;
     public static ArrayList<Sprite> dirtGrid;
