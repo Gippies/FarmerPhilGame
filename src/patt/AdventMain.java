@@ -846,7 +846,6 @@ public class AdventMain extends GameCore {
         g.setColor(Color.green);
         //g.fillPolygon(bgImage);
         for (Sprite sprite : grassGrid) {
-
             g.drawImage(sprite.getImage(), (int) sprite.getX(), (int) sprite.getY(), null);
         }
 

@@ -250,19 +250,19 @@ public class CreatorMethods {
         MyLabel lblWASD = new MyLabel(100, 200, "Use the WASD keys to Move Around the Field. Spacebar to attack.");
         MyLabel lblExplain = new MyLabel(100, 400, "The Grubs are bad, they are trying to eat your crops!! Stop them before they eat your field!");
 
-        AdventMain.pauseMenu.addMyButton(btnClose);
-        AdventMain.startMenu.addMyButton(btnStartCont);
-        AdventMain.startMenu.addMyButton(btnStartHardM);
-        AdventMain.startMenu.addMyButton(btnStartMediumM);
-        AdventMain.startMenu.addMyButton(btnStartEasyM);
-        AdventMain.shopMenu.addMyButton(btnShopCont);
-        AdventMain.shopMenu.addMyButton(btnHealthAdder);
-        AdventMain.shopMenu.addMyButton(btnBuyField);
-        AdventMain.shopMenu.addMyButton(btnBuySpray);
-        AdventMain.shopMenu.addMyButton(btnBuyBearTraps);
-        AdventMain.shopMenu.addMyButton(btnBuyTractor);
-        AdventMain.startMenu.addMyLabel(lblWASD);
-        AdventMain.startMenu.addMyLabel(lblExplain);
+        AdventMain.pauseMenu.addButton(btnClose);
+        AdventMain.startMenu.addButton(btnStartCont);
+        AdventMain.startMenu.addButton(btnStartHardM);
+        AdventMain.startMenu.addButton(btnStartMediumM);
+        AdventMain.startMenu.addButton(btnStartEasyM);
+        AdventMain.shopMenu.addButton(btnShopCont);
+        AdventMain.shopMenu.addButton(btnHealthAdder);
+        AdventMain.shopMenu.addButton(btnBuyField);
+        AdventMain.shopMenu.addButton(btnBuySpray);
+        AdventMain.shopMenu.addButton(btnBuyBearTraps);
+        AdventMain.shopMenu.addButton(btnBuyTractor);
+        AdventMain.startMenu.addLabel(lblWASD);
+        AdventMain.startMenu.addLabel(lblExplain);
 
         AdventMain.startMenu.getButton(1).press();
         //TODO Finish LowerGUI Information

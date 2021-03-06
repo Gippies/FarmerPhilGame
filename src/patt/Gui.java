@@ -79,11 +79,11 @@ public class Gui {
         return height;
     }
 
-    public void addMyButton(Button b) {
+    public void addButton(Button b) {
         buttons.add(b);
     }
 
-    public void addMyLabel(MyLabel l) {
+    public void addLabel(MyLabel l) {
         labels.add(l);
     }
 
