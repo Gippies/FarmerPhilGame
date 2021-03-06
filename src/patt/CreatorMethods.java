@@ -231,7 +231,7 @@ public class CreatorMethods {
         Image shopCImage = new ImageIcon("res/shopBrick.png").getImage();
         AdventMain.pauseMenu = new MyGui(pauseCImage, AdventMain.twoFifthX, AdventMain.fiveSixtY, AdventMain.threeFifthX - AdventMain.twoFifthX, AdventMain.elevenSixtY - AdventMain.fiveSixtY, "Paused");
         AdventMain.startMenu = new MyGui(startCImage, AdventMain.oneTwentyX, AdventMain.oneTwentyY, AdventMain.nineteenTwentyX - AdventMain.oneTwentyX, AdventMain.nineteenTwentyY - AdventMain.oneTwentyY, "Instructions");
-        AdventMain.shopMenu = new ShopGui(shopCImage, AdventMain.twoFifthX, AdventMain.fiveSixtY, AdventMain.threeFifthX - AdventMain.twoFifthX, AdventMain.elevenSixtY - AdventMain.fiveSixtY, "Shop");
+        AdventMain.shopMenu = new MyGui(shopCImage, AdventMain.twoFifthX, AdventMain.fiveSixtY, AdventMain.threeFifthX - AdventMain.twoFifthX, AdventMain.elevenSixtY - AdventMain.fiveSixtY, "Shop");
 
 
         //TODO Make the new buttons relative to the screen size and labels

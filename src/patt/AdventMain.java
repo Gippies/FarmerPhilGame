@@ -854,8 +854,8 @@ public class AdventMain extends GameCore {
         //draw farmland
         g.setColor(MyBrown);
         //g.fillPolygon(farmLand);
-        for (int k = 0; k < dirtGrid.size(); k++)
-            g.drawImage(dirtGrid.get(k).getImage(), (int) dirtGrid.get(k).getX(), (int) dirtGrid.get(k).getY(), null);
+        for (Sprite sprite : dirtGrid)
+            g.drawImage(sprite.getImage(), (int) sprite.getX(), (int) sprite.getY(), null);
 
         //Draw Wheat
         g.setColor(Color.black);
