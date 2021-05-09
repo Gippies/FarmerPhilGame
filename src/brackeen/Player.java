@@ -1,8 +1,11 @@
 package brackeen;
 
-import java.util.ArrayList;
+import patt.AdventMain;
+import patt.CreatorMethods;
+import patt.Weapon;
 
-import patt.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * The Player extends the Sprite class to add states
@@ -12,35 +15,20 @@ public class Player extends Sprite {
 
     public float SPEED = .4f;
     private double health;
-    private int currentWeapon;
+    private Weapon currentWeapon;
 
-    private Animation moveR;
-    private Animation moveL;
-    private Animation moveU;
-    private Animation moveD;
-    private Animation stopR;
-    private Animation stopL;
-    private Animation stopD;
-    private Animation stopU;
+    private final Animation stopR;
+    private final Animation stopL;
+    private final Animation stopU;
+    private final List<Weapon> weaponInv;
 
-    private ArrayList<Weapon> weaponInv;
-
-
-    public Player(Animation sL) {
-        super(sL);
+    public Player(Animation stopL, Animation stopR, Animation stopU) {
+        super(stopL);
+        this.stopL = stopL;
+        this.stopR = stopR;
+        this.stopU = stopU;
         health = 100;
-        weaponInv = new ArrayList<Weapon>();
-        currentWeapon = 0;
-    }
-
-    public Player(Animation sL, Animation sR, Animation sU) {
-        super(sL);
-        stopL = sL;
-        stopR = sR;
-        stopU = sU;
-        health = 100;
-        weaponInv = new ArrayList<Weapon>();
-        currentWeapon = 0;
+        weaponInv = new ArrayList<>();
     }
 
     /**
@@ -49,10 +37,9 @@ public class Player extends Sprite {
      * the floor.
      */
     public void update(long elapsedTime) {
-
         // move player
         super.update(elapsedTime);
-        weaponInv.get(currentWeapon).update(elapsedTime);
+        currentWeapon.update(elapsedTime);
     }
 
     public void setIdleR() {
@@ -71,10 +58,6 @@ public class Player extends Sprite {
         return health;
     }
 
-    public void setHealth(double h) {
-        health = h;
-    }
-
     public void loseHealth(double l) {
         health -= l;
     }
@@ -85,11 +68,23 @@ public class Player extends Sprite {
 
     public void addWeapon(Weapon w) {
         weaponInv.add(w);
+        if (currentWeapon == null) {
+            currentWeapon = w;
+        }
     }
 
-    public void deleteWeapon(int k) {
-        weaponInv.remove(k);
-        if (weaponInv.get(currentWeapon).equals("Tractor")) {
+    public void deleteWeapon(Weapon weapon) {
+        weaponInv.remove(weapon);
+        if (currentWeapon.equals(CreatorMethods.Tractor)) {
+            this.SPEED = .5f;
+        } else {
+            this.SPEED = .4f;
+        }
+    }
+
+    public void deleteWeapon(int index) {
+        weaponInv.remove(index);
+        if (currentWeapon.equals(CreatorMethods.Tractor)) {
             this.SPEED = .5f;
         } else {
             this.SPEED = .4f;
@@ -97,7 +92,7 @@ public class Player extends Sprite {
     }
 
     public Weapon getWeapon() {
-        return weaponInv.get(currentWeapon);
+        return currentWeapon;
     }
 
     public Weapon getWeapon(int k) {
@@ -108,59 +103,43 @@ public class Player extends Sprite {
         return weaponInv.size();
     }
 
-    public int getCurrentWeapon() {
-        return currentWeapon;
-    }
-
-    public void setCurrentWeapon(int k) {
-        currentWeapon = k;
-        AdventMain.weaponInfo.setText("Current Weapon: " + this.getWeapon().getName());
-        AdventMain.ammoInfo.setText("Wave Ammo: " + AdventMain.player.getWeapon().getCurrentAmmo());
-        if (AdventMain.player.getWeapon().equals("BearTrapHold")) {
-            AdventMain.ammoInfo.setText("Ammo: " + AdventMain.player.getWeapon().getCurrentAmmo());
-        }
+    public int getCurrentWeaponIndex() {
+        return weaponInv.indexOf(currentWeapon);
     }
 
     public void nextWeapon() {
         if (weaponInv.size() > 1) {
-            if ((currentWeapon + 1) < weaponInv.size()) {
-                currentWeapon++;
+            if (weaponInv.indexOf(currentWeapon) + 1 < weaponInv.size()) {
+                currentWeapon = weaponInv.get(weaponInv.indexOf(currentWeapon) + 1);
             } else {
-                currentWeapon = 0;
+                currentWeapon = weaponInv.get(0);
             }
-            AdventMain.weaponInfo.setText("Current Weapon: " + this.getWeapon().getName());
-            AdventMain.ammoInfo.setText("Wave Ammo: " + AdventMain.player.getWeapon().getCurrentAmmo());
-            if (AdventMain.player.getWeapon().equals("BearTrapHold")) {
-                AdventMain.ammoInfo.setText("Ammo: " + AdventMain.player.getWeapon().getCurrentAmmo());
-            }
-
-            if (weaponInv.get(currentWeapon).equals("Tractor")) {
-                this.SPEED = .5f;
-            } else {
-                this.SPEED = .4f;
-            }
+            setWeaponLabels();
         }
-
     }
 
     public void prevWeapon() {
         if (weaponInv.size() > 1) {
-            if ((currentWeapon - 1) >= 0) {
-                currentWeapon--;
+            if (weaponInv.indexOf(currentWeapon) - 1 >= 0) {
+                currentWeapon = weaponInv.get(weaponInv.indexOf(currentWeapon) - 1);
             } else {
-                currentWeapon = weaponInv.size() - 1;
+                currentWeapon = weaponInv.get(weaponInv.size() - 1);
             }
-            AdventMain.weaponInfo.setText("Current Weapon: " + this.getWeapon().getName());
-            AdventMain.ammoInfo.setText("Wave Ammo: " + AdventMain.player.getWeapon().getCurrentAmmo());
-            if (AdventMain.player.getWeapon().equals("BearTrapHold")) {
-                AdventMain.ammoInfo.setText("Ammo: " + AdventMain.player.getWeapon().getCurrentAmmo());
-            }
+            setWeaponLabels();
+        }
+    }
 
-            if (weaponInv.get(currentWeapon).equals("Tractor")) {
-                this.SPEED = .5f;
-            } else {
-                this.SPEED = .4f;
-            }
+    private void setWeaponLabels() {
+        AdventMain.weaponInfo.setText("Current Weapon: " + this.getWeapon().getName());
+        AdventMain.ammoInfo.setText("Wave Ammo: " + AdventMain.player.getWeapon().getCurrentAmmo());
+        if (AdventMain.player.getWeapon().equals(CreatorMethods.bearTrapHold)) {
+            AdventMain.ammoInfo.setText("Ammo: " + AdventMain.player.getWeapon().getCurrentAmmo());
+        }
+
+        if (currentWeapon.equals(CreatorMethods.Tractor)) {
+            this.SPEED = .5f;
+        } else {
+            this.SPEED = .4f;
         }
     }
 }

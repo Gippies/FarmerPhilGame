@@ -5,13 +5,14 @@ import brackeen.Sprite;
 
 public class Weapon extends Sprite {
 
-    private int strength;
+    private final int strength;
+    private final boolean doubleSided;
+    private final double weaponTime;
+    private final double maxAmmo;
+    private final String name;
+
     private boolean isActive; //this will be for a fraction of a second
-    private boolean doubleSided;
-    private double weaponTime;
-    private double maxAmmo;
     private double currentAmmo;
-    private String name;
     private Animation faceLeft;
     private Animation faceRight;
     public static Animation bearTrapAnimation;
@@ -46,8 +47,8 @@ public class Weapon extends Sprite {
         isActive = true;
     }
 
-    public boolean equals(String n) {
-        return this.name.equals(n);
+    public boolean equals(Weapon w) {
+        return this.name.equals(w.getName());
     }
 
     public void stopWeapon() {
@@ -63,7 +64,7 @@ public class Weapon extends Sprite {
     }
 
     public void updateLocation(float px, float py, int pw, int ph, int ww, int wh, boolean left) {
-        if (!this.equals("Tractor")) {
+        if (!this.equals(CreatorMethods.Tractor)) {
             if (doubleSided) {
                 if (left) {
                     this.setAnim(faceLeft);
@@ -111,13 +112,7 @@ public class Weapon extends Sprite {
         currentAmmo = maxAmmo;
     }
 
-    public double getMaxAmmo() {
-        return maxAmmo;
-    }
-
     public double getCurrentAmmo() {
         return currentAmmo;
     }
-
-
 }

@@ -176,15 +176,10 @@ public class CreatorMethods {
         bearTrapHold = new Weapon(dummyBearTrap, 0, 100., "BearTrapHold", 10);
 
         AdventMain.player.addWeapon(woodBat);
-        //AdventMain.player.addWeapon(Tractor);
-        //AdventMain.player.addWeapon(bearTrapHold);
-        //AdventMain.player.addWeapon(sprayCan);
         AdventMain.player.getWeapon().updateLocation(AdventMain.player.getX(), AdventMain.player.getY(), AdventMain.player.getWidth(), AdventMain.player.getHeight(), AdventMain.player.getWeapon().getWidth(), AdventMain.player.getWeapon().getHeight(), true);
 
         //this is for the health bar outline later
         AdventMain.playerHBSize = (int) AdventMain.player.getHealth() * 3;
-
-
     }
 
     public static void createGUIStuff() {

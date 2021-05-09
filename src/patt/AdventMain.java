@@ -535,10 +535,10 @@ public class AdventMain extends GameCore {
         float velocityY = 0;
         //deleteMe = false;
 
-        if (player.getWeapon().getCurrentAmmo() <= 0 && player.getWeapon().equals("BearTrapHold")) {
-            int weaponIndex = player.getCurrentWeapon();
+        if (player.getWeapon().getCurrentAmmo() <= 0 && player.getWeapon().equals(CreatorMethods.bearTrapHold)) {
+            Weapon weapon = player.getWeapon();
             player.prevWeapon();
-            player.deleteWeapon(weaponIndex);
+            player.deleteWeapon(weapon);
             weaponToggle = false;
 
             shopMenu.getButton(4).release();
@@ -682,7 +682,7 @@ public class AdventMain extends GameCore {
 
         for (int k = player.getAmountOfWeapons() - 1; k >= 0; k--)
             if (player.getWeapon(k).getCurrentAmmo() == 0) {
-                if (player.getCurrentWeapon() == k)
+                if (player.getCurrentWeaponIndex() == k)
                     player.prevWeapon();
                 player.deleteWeapon(k);
                 weaponToggle = false;
