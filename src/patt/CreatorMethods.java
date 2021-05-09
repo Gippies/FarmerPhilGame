@@ -2,11 +2,8 @@ package patt;
 
 import java.awt.Color;
 import java.awt.Image;
-import java.awt.Polygon;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-
-import javax.swing.ImageIcon;
 
 import brackeen.*;
 
@@ -18,24 +15,6 @@ public class CreatorMethods {
     public static Weapon Tractor;
 
     public static void createSprites() {
-        //This is to set sprites relative to the size of the screen
-        AdventMain.twoFifthX = (AdventMain.screen.getWidth() * 2) / 5;
-        AdventMain.fiveSixtY = (AdventMain.screen.getHeight() * 5) / 16;
-        AdventMain.threeFifthX = (AdventMain.screen.getWidth() * 3) / 5;
-        AdventMain.elevenSixtY = (AdventMain.screen.getHeight() * 11) / 16;
-        AdventMain.oneTwentyX = AdventMain.screen.getWidth() / 20;
-        AdventMain.oneTwentyY = AdventMain.screen.getHeight() / 20;
-        AdventMain.nineteenTwentyX = (AdventMain.screen.getWidth() * 19) / 20;
-        AdventMain.nineteenTwentyY = (AdventMain.screen.getHeight() * 19) / 20;
-        AdventMain.twentyNineThirtyY = (AdventMain.screen.getHeight() * 29) / 30;
-        AdventMain.fourteenFifteenY = (AdventMain.screen.getHeight() * 14) / 15;
-        AdventMain.threeTwentyX = (AdventMain.screen.getWidth() * 3) / 20;
-        AdventMain.oneFourthRight = AdventMain.screen.getWidth() / 4;
-        AdventMain.oneFourthDown = AdventMain.screen.getHeight() / 4;
-        AdventMain.oneFourthLeft = (AdventMain.screen.getWidth() * 3) / 4;
-        AdventMain.oneFourthUp = (AdventMain.screen.getHeight() * 3) / 4;
-        AdventMain.threeFortyX = (AdventMain.screen.getWidth() * 3) / 40;
-
         //This is setting up the Start and Pause Menus
 
         CreatorMethods.createGUIStuff();
@@ -75,41 +54,28 @@ public class CreatorMethods {
         }
 
         //Defining the black Rectangle
-        AdventMain.nineTenY = (AdventMain.screen.getHeight() * 9) / 10;
-
-        AdventMain.blackRect = new Polygon();
-        AdventMain.blackRect.addPoint(0, AdventMain.nineTenY);
-        AdventMain.blackRect.addPoint(AdventMain.screen.getWidth(), AdventMain.nineTenY);
-        AdventMain.blackRect.addPoint(AdventMain.screen.getWidth(), AdventMain.screen.getHeight());
-        AdventMain.blackRect.addPoint(0, AdventMain.screen.getHeight());
+        ScreenFractions.nineTenY = (AdventMain.screen.getHeight() * 9) / 10;
 
         //Defining the Farmland
-				
-				
-			/*	farmLand = new Polygon();
-				farmLand.addPoint(oneFourthRight, oneFourthDown);
-				farmLand.addPoint(oneFourthLeft, oneFourthDown);
-				farmLand.addPoint(oneFourthLeft, oneFourthUp);
-				farmLand.addPoint(oneFourthRight, oneFourthUp);  */
         Image dirtImage = GameCore.loadImage("res/dirt.png");
 
         Animation dirtAnim = new Animation();
         dirtAnim.addFrame(dirtImage, 500);
 
-        int dirtX = AdventMain.oneFourthRight;
-        int dirtY = AdventMain.oneFourthDown;
+        int dirtX = ScreenFractions.oneFourthRight;
+        int dirtY = ScreenFractions.oneFourthDown;
 
         AdventMain.dirtGrid = new ArrayList<Sprite>();
 
-        while (dirtY < AdventMain.oneFourthUp) {
-            while (dirtX < AdventMain.oneFourthLeft) {
+        while (dirtY < ScreenFractions.oneFourthUp) {
+            while (dirtX < ScreenFractions.oneFourthLeft) {
 
                 AdventMain.dirtGrid.add(new Sprite(dirtAnim));
                 AdventMain.dirtGrid.get(AdventMain.dirtGrid.size() - 1).setX(dirtX);
                 AdventMain.dirtGrid.get(AdventMain.dirtGrid.size() - 1).setY(dirtY);
                 dirtX += dirtImage.getWidth(null);
             }
-            dirtX = AdventMain.oneFourthRight;
+            dirtX = ScreenFractions.oneFourthRight;
             dirtY += dirtImage.getHeight(null);
         }
 
@@ -131,8 +97,8 @@ public class CreatorMethods {
         playerIdleU.addFrame(playerImageU, 500);
 
         AdventMain.player = new Player(playerIdleL, playerIdleR, playerIdleU);
-        AdventMain.player.setX(AdventMain.screen.getWidth() / 2 - (AdventMain.player.getWidth() / 2));
-        AdventMain.player.setY(AdventMain.screen.getHeight() / 2 - (AdventMain.player.getHeight() / 2));
+        AdventMain.player.setX(AdventMain.screen.getWidth() / 2.0f - (AdventMain.player.getWidth() / 2.0f));
+        AdventMain.player.setY(AdventMain.screen.getHeight() / 2.0f - (AdventMain.player.getHeight() / 2.0f));
 
         //Weapon Imaging:
 
@@ -223,60 +189,18 @@ public class CreatorMethods {
 
     public static void createGUIStuff() {
 
-        Crop pauseCrop = new Crop("res/pauseWood.png", AdventMain.twoFifthX, AdventMain.fiveSixtY, AdventMain.threeFifthX - AdventMain.twoFifthX, AdventMain.elevenSixtY - AdventMain.fiveSixtY);
-        Crop startCrop = new Crop("res/pauseWood.png", AdventMain.oneTwentyX, AdventMain.oneTwentyY, AdventMain.nineteenTwentyX - AdventMain.oneTwentyX, AdventMain.nineteenTwentyY - AdventMain.oneTwentyY);
-        //Crop shopCrop = new Crop("res/shopBrick.png", twoFifthX, fiveSixtY, threeFifthX - twoFifthX, elevenSixtY - fiveSixtY);
-        Image pauseCImage = pauseCrop.getImage();
-        Image startCImage = startCrop.getImage();
-        Image shopCImage = new ImageIcon("res/shopBrick.png").getImage();
-        AdventMain.pauseMenu = new Gui(pauseCImage, AdventMain.twoFifthX, AdventMain.fiveSixtY, AdventMain.threeFifthX - AdventMain.twoFifthX, AdventMain.elevenSixtY - AdventMain.fiveSixtY, "Paused");
-        AdventMain.startMenu = new Gui(startCImage, AdventMain.oneTwentyX, AdventMain.oneTwentyY, AdventMain.nineteenTwentyX - AdventMain.oneTwentyX, AdventMain.nineteenTwentyY - AdventMain.oneTwentyY, "Instructions");
-        AdventMain.shopMenu = new Gui(shopCImage, AdventMain.twoFifthX, AdventMain.fiveSixtY, AdventMain.threeFifthX - AdventMain.twoFifthX, AdventMain.elevenSixtY - AdventMain.fiveSixtY, "Shop");
-
-
-        //TODO Make the new buttons relative to the screen size and labels
-        Button btnClose = new Button(((AdventMain.twoFifthX + AdventMain.threeFifthX) / 2) - Button.BUTTON_WIDTH / 2, (AdventMain.elevenSixtY * 5) / 6, Button.BUTTON_WIDTH, Button.BUTTON_HEIGHT, "Quit", "Close");
-        Button btnShopCont = new Button(((AdventMain.twoFifthX + AdventMain.threeFifthX) / 2) - Button.BUTTON_WIDTH / 2, ((AdventMain.elevenSixtY * 4) / 6) + 150, Button.BUTTON_WIDTH, Button.BUTTON_HEIGHT, "Continue", "ShopCont");
-        Button btnBuyTractor = new Button(((AdventMain.twoFifthX + AdventMain.threeFifthX) / 2) - Button.BUTTON_WIDTH / 2, ((AdventMain.elevenSixtY * 4) / 6) + 100, Button.BUTTON_WIDTH, Button.BUTTON_HEIGHT, "Tractor $5000", "BuyTractor");
-        Button btnHealthAdder = new Button(((AdventMain.twoFifthX + AdventMain.threeFifthX) / 2) - Button.BUTTON_WIDTH / 2, (AdventMain.elevenSixtY * 4) / 6, Button.BUTTON_WIDTH, Button.BUTTON_HEIGHT, "+25 Health for $500", "HealthAdder");
-        Button btnBuyField = new Button(((AdventMain.twoFifthX + AdventMain.threeFifthX) / 2) - Button.BUTTON_WIDTH / 2, ((AdventMain.elevenSixtY * 4) / 6) - 50, Button.BUTTON_WIDTH, Button.BUTTON_HEIGHT, "Replant Field", "BuyField");
-        Button btnBuySpray = new Button(((AdventMain.twoFifthX + AdventMain.threeFifthX) / 2) - Button.BUTTON_WIDTH / 2, ((AdventMain.elevenSixtY * 4) / 6) - 100, Button.BUTTON_WIDTH, Button.BUTTON_HEIGHT, "Spray Can $2000", "BuySprayCan");
-        Button btnBuyBearTraps = new Button(((AdventMain.twoFifthX + AdventMain.threeFifthX) / 2) - Button.BUTTON_WIDTH / 2, ((AdventMain.elevenSixtY * 4) / 6) + 50, Button.BUTTON_WIDTH, Button.BUTTON_HEIGHT, "Bear Traps $1000", "BuyBearTraps");
-        Button btnStartCont = new Button(((AdventMain.oneTwentyX + AdventMain.nineteenTwentyX) / 2) - Button.BUTTON_WIDTH / 2, (AdventMain.nineteenTwentyY * 9) / 10, Button.BUTTON_WIDTH, Button.BUTTON_HEIGHT, "Continue", "StartCont");
-        Button btnStartHardM = new Button(((AdventMain.oneTwentyX + AdventMain.nineteenTwentyX) / 2) - (Button.BUTTON_WIDTH / 2) - 300, (AdventMain.nineteenTwentyY * 9) / 10, Button.BUTTON_WIDTH, Button.BUTTON_HEIGHT, "Hard", "StartHardM");
-        Button btnStartMediumM = new Button(((AdventMain.oneTwentyX + AdventMain.nineteenTwentyX) / 2) - (Button.BUTTON_WIDTH / 2) - 300, ((AdventMain.nineteenTwentyY * 9) / 10) - 50, Button.BUTTON_WIDTH, Button.BUTTON_HEIGHT, "Medium", "StartMediumM");
-        Button btnStartEasyM = new Button(((AdventMain.oneTwentyX + AdventMain.nineteenTwentyX) / 2) - (Button.BUTTON_WIDTH / 2) - 300, ((AdventMain.nineteenTwentyY * 9) / 10) - 100, Button.BUTTON_WIDTH, Button.BUTTON_HEIGHT, "Easy", "StartEasyM");
-
-        MyLabel lblWASD = new MyLabel(100, 200, "Use the WASD keys to Move Around the Field. Spacebar to attack.");
-        MyLabel lblExplain = new MyLabel(100, 400, "The Grubs are bad, they are trying to eat your crops!! Stop them before they eat your field!");
-
-        AdventMain.pauseMenu.addButton(btnClose);
-        AdventMain.startMenu.addButton(btnStartCont);
-        AdventMain.startMenu.addButton(btnStartHardM);
-        AdventMain.startMenu.addButton(btnStartMediumM);
-        AdventMain.startMenu.addButton(btnStartEasyM);
-        AdventMain.shopMenu.addButton(btnShopCont);
-        AdventMain.shopMenu.addButton(btnHealthAdder);
-        AdventMain.shopMenu.addButton(btnBuyField);
-        AdventMain.shopMenu.addButton(btnBuySpray);
-        AdventMain.shopMenu.addButton(btnBuyBearTraps);
-        AdventMain.shopMenu.addButton(btnBuyTractor);
-        AdventMain.startMenu.addLabel(lblWASD);
-        AdventMain.startMenu.addLabel(lblExplain);
-
-        AdventMain.startMenu.getButton(1).press();
         //TODO Finish LowerGUI Information
         //LowerGui code Starts Here:
         AdventMain.waveNumber = 1;
         AdventMain.moneyNumber = AdventMain.MONEY_START;
         DecimalFormat mf = new DecimalFormat("$#,###,##0.00");
 
-        AdventMain.waveInfo = new MyLabel(AdventMain.twoFifthX, AdventMain.fourteenFifteenY + (AdventMain.screen.getHeight() - AdventMain.twentyNineThirtyY), "Wave: " + AdventMain.waveNumber);
+        AdventMain.waveInfo = new MyLabel(ScreenFractions.twoFifthX, ScreenFractions.fourteenFifteenY + (AdventMain.screen.getHeight() - ScreenFractions.twentyNineThirtyY), "Wave: " + AdventMain.waveNumber);
         //moneyInfo = new MyLabel(oneFourthLeft, fourteenFifteenY+(screen.getHeight() - twentyNineThirtyY), "Money: " + mf.format(moneyNumber));
-        AdventMain.moneyInfo = new MyLabel(AdventMain.twoFifthX, AdventMain.fourteenFifteenY, "Money: " + mf.format(AdventMain.moneyNumber));
-        AdventMain.lblHealth = new MyLabel(AdventMain.threeFortyX, AdventMain.fourteenFifteenY + (AdventMain.screen.getHeight() - AdventMain.twentyNineThirtyY), "Health: ");
-        AdventMain.weaponInfo = new MyLabel(AdventMain.threeFifthX, AdventMain.fourteenFifteenY, "Current Weapon: WoodBat");
-        AdventMain.ammoInfo = new MyLabel(AdventMain.threeFifthX, AdventMain.fourteenFifteenY + (AdventMain.screen.getHeight() - AdventMain.twentyNineThirtyY), "Wave Ammo: " + Double.POSITIVE_INFINITY);
+        AdventMain.moneyInfo = new MyLabel(ScreenFractions.twoFifthX, ScreenFractions.fourteenFifteenY, "Money: " + mf.format(AdventMain.moneyNumber));
+        AdventMain.lblHealth = new MyLabel(ScreenFractions.threeFortyX, ScreenFractions.fourteenFifteenY + (AdventMain.screen.getHeight() - ScreenFractions.twentyNineThirtyY), "Health: ");
+        AdventMain.weaponInfo = new MyLabel(ScreenFractions.threeFifthX, ScreenFractions.fourteenFifteenY, "Current Weapon: WoodBat");
+        AdventMain.ammoInfo = new MyLabel(ScreenFractions.threeFifthX, ScreenFractions.fourteenFifteenY + (AdventMain.screen.getHeight() - ScreenFractions.twentyNineThirtyY), "Wave Ammo: " + Double.POSITIVE_INFINITY);
     }
 
 }

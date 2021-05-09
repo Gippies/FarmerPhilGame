@@ -21,6 +21,7 @@ import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
+import javax.swing.ImageIcon;
 
 import brackeen.*;
 
@@ -31,12 +32,11 @@ public class AdventMain extends GameCore {
     }
 
     //private Polygon bgImage;
-    public static Polygon blackRect;
+    public Polygon blackRect;
     //private Polygon farmLand;
-    public static int wheatHealthMax;
-    public static Gui startMenu;
-    public static Gui pauseMenu;
-    public static Gui shopMenu;
+    public Gui startMenu;
+    public Gui pauseMenu;
+    public Gui shopMenu;
     private MoosicThread musicThr;
     public static ArrayList<Sprite> grassGrid;
     public static ArrayList<Sprite> dirtGrid;
@@ -64,26 +64,7 @@ public class AdventMain extends GameCore {
     private List<Grub> grubs;
     private GrubStartLocation gStarters;
 
-    //These are fraction sizes of the screen to X or Y
-    public static int twentyNineThirtyY,
-            fourteenFifteenY,
-            threeTwentyX,
-            nineTenY,
-            playerHBSize,
-            twoFifthX,
-            threeFifthX,
-            fiveSixtY,
-            elevenSixtY,
-            oneTwentyX,
-            oneTwentyY,
-            nineteenTwentyX,
-            nineteenTwentyY,
-            oneFourthRight,
-            oneFourthLeft,
-            oneFourthDown,
-            oneFourthUp,
-            threeFortyX;
-
+    public static int playerHBSize;
 
     public static Player player;
     public static int numOfGrubby = 10;
@@ -104,11 +85,59 @@ public class AdventMain extends GameCore {
     public void init() {
         super.init();
         Window window = screen.getFullScreenWindow();
+        ScreenFractions.init(screen.getWidth(), screen.getHeight());
         inputManager = new InputManager(window);
 
         // use these lines for relative mouse mode
         //inputManager.setRelativeMouseMode(true);
         inputManager.setCursor(InputManager.INVISIBLE_CURSOR);
+
+        blackRect = new Polygon();
+        blackRect.addPoint(0, ScreenFractions.nineTenY);
+        blackRect.addPoint(screen.getWidth(), ScreenFractions.nineTenY);
+        blackRect.addPoint(screen.getWidth(), screen.getHeight());
+        blackRect.addPoint(0, screen.getHeight());
+
+        Crop pauseCrop = new Crop("res/pauseWood.png", ScreenFractions.twoFifthX, ScreenFractions.fiveSixtY, ScreenFractions.threeFifthX - ScreenFractions.twoFifthX, ScreenFractions.elevenSixtY - ScreenFractions.fiveSixtY);
+        Crop startCrop = new Crop("res/pauseWood.png", ScreenFractions.oneTwentyX, ScreenFractions.oneTwentyY, ScreenFractions.nineteenTwentyX - ScreenFractions.oneTwentyX, ScreenFractions.nineteenTwentyY - ScreenFractions.oneTwentyY);
+        Image pauseCImage = pauseCrop.getImage();
+        Image startCImage = startCrop.getImage();
+        Image shopCImage = new ImageIcon("res/shopBrick.png").getImage();
+
+        pauseMenu = new Gui(pauseCImage, ScreenFractions.twoFifthX, ScreenFractions.fiveSixtY, ScreenFractions.threeFifthX - ScreenFractions.twoFifthX, ScreenFractions.elevenSixtY - ScreenFractions.fiveSixtY, "Paused");
+        startMenu = new Gui(startCImage, ScreenFractions.oneTwentyX, ScreenFractions.oneTwentyY, ScreenFractions.nineteenTwentyX - ScreenFractions.oneTwentyX, ScreenFractions.nineteenTwentyY - ScreenFractions.oneTwentyY, "Instructions");
+        shopMenu = new Gui(shopCImage, ScreenFractions.twoFifthX, ScreenFractions.fiveSixtY, ScreenFractions.threeFifthX - ScreenFractions.twoFifthX, ScreenFractions.elevenSixtY - ScreenFractions.fiveSixtY, "Shop");
+
+        Button btnClose = new Button(((ScreenFractions.twoFifthX + ScreenFractions.threeFifthX) / 2) - Button.BUTTON_WIDTH / 2, (ScreenFractions.elevenSixtY * 5) / 6, Button.BUTTON_WIDTH, Button.BUTTON_HEIGHT, "Quit", "Close");
+        Button btnShopCont = new Button(((ScreenFractions.twoFifthX + ScreenFractions.threeFifthX) / 2) - Button.BUTTON_WIDTH / 2, ((ScreenFractions.elevenSixtY * 4) / 6) + 150, Button.BUTTON_WIDTH, Button.BUTTON_HEIGHT, "Continue", "ShopCont");
+        Button btnBuyTractor = new Button(((ScreenFractions.twoFifthX + ScreenFractions.threeFifthX) / 2) - Button.BUTTON_WIDTH / 2, ((ScreenFractions.elevenSixtY * 4) / 6) + 100, Button.BUTTON_WIDTH, Button.BUTTON_HEIGHT, "Tractor $5000", "BuyTractor");
+        Button btnHealthAdder = new Button(((ScreenFractions.twoFifthX + ScreenFractions.threeFifthX) / 2) - Button.BUTTON_WIDTH / 2, (ScreenFractions.elevenSixtY * 4) / 6, Button.BUTTON_WIDTH, Button.BUTTON_HEIGHT, "+25 Health for $500", "HealthAdder");
+        Button btnBuyField = new Button(((ScreenFractions.twoFifthX + ScreenFractions.threeFifthX) / 2) - Button.BUTTON_WIDTH / 2, ((ScreenFractions.elevenSixtY * 4) / 6) - 50, Button.BUTTON_WIDTH, Button.BUTTON_HEIGHT, "Replant Field", "BuyField");
+        Button btnBuySpray = new Button(((ScreenFractions.twoFifthX + ScreenFractions.threeFifthX) / 2) - Button.BUTTON_WIDTH / 2, ((ScreenFractions.elevenSixtY * 4) / 6) - 100, Button.BUTTON_WIDTH, Button.BUTTON_HEIGHT, "Spray Can $2000", "BuySprayCan");
+        Button btnBuyBearTraps = new Button(((ScreenFractions.twoFifthX + ScreenFractions.threeFifthX) / 2) - Button.BUTTON_WIDTH / 2, ((ScreenFractions.elevenSixtY * 4) / 6) + 50, Button.BUTTON_WIDTH, Button.BUTTON_HEIGHT, "Bear Traps $1000", "BuyBearTraps");
+        Button btnStartCont = new Button(((ScreenFractions.oneTwentyX + ScreenFractions.nineteenTwentyX) / 2) - Button.BUTTON_WIDTH / 2, (ScreenFractions.nineteenTwentyY * 9) / 10, Button.BUTTON_WIDTH, Button.BUTTON_HEIGHT, "Continue", "StartCont");
+        Button btnStartHardM = new Button(((ScreenFractions.oneTwentyX + ScreenFractions.nineteenTwentyX) / 2) - (Button.BUTTON_WIDTH / 2) - 300, (ScreenFractions.nineteenTwentyY * 9) / 10, Button.BUTTON_WIDTH, Button.BUTTON_HEIGHT, "Hard", "StartHardM");
+        Button btnStartMediumM = new Button(((ScreenFractions.oneTwentyX + ScreenFractions.nineteenTwentyX) / 2) - (Button.BUTTON_WIDTH / 2) - 300, ((ScreenFractions.nineteenTwentyY * 9) / 10) - 50, Button.BUTTON_WIDTH, Button.BUTTON_HEIGHT, "Medium", "StartMediumM");
+        Button btnStartEasyM = new Button(((ScreenFractions.oneTwentyX + ScreenFractions.nineteenTwentyX) / 2) - (Button.BUTTON_WIDTH / 2) - 300, ((ScreenFractions.nineteenTwentyY * 9) / 10) - 100, Button.BUTTON_WIDTH, Button.BUTTON_HEIGHT, "Easy", "StartEasyM");
+
+        MyLabel lblWASD = new MyLabel(100, 200, "Use the WASD keys to Move Around the Field. Spacebar to attack.");
+        MyLabel lblExplain = new MyLabel(100, 400, "The Grubs are bad, they are trying to eat your crops!! Stop them before they eat your field!");
+
+        pauseMenu.addButton(btnClose);
+        startMenu.addButton(btnStartCont);
+        startMenu.addButton(btnStartHardM);
+        startMenu.addButton(btnStartMediumM);
+        startMenu.addButton(btnStartEasyM);
+        shopMenu.addButton(btnShopCont);
+        shopMenu.addButton(btnHealthAdder);
+        shopMenu.addButton(btnBuyField);
+        shopMenu.addButton(btnBuySpray);
+        shopMenu.addButton(btnBuyBearTraps);
+        shopMenu.addButton(btnBuyTractor);
+        startMenu.addLabel(lblWASD);
+        startMenu.addLabel(lblExplain);
+
+        startMenu.getButton(1).press();
 
         createGameActions();
 
@@ -129,7 +158,7 @@ public class AdventMain extends GameCore {
 
         Grub g = new Grub();
 
-        gStarters = new GrubStartLocation(AdventMain.screen.getWidth(), AdventMain.nineTenY, g.grubImageWidth, g.grubImageHeight);
+        gStarters = new GrubStartLocation(AdventMain.screen.getWidth(), ScreenFractions.nineTenY, g.grubImageWidth, g.grubImageHeight);
         for (int k = 0; k < AdventMain.numOfGrubby; k++) {
             Grub grub = new Grub();
             grubs.add(grub);
@@ -149,8 +178,6 @@ public class AdventMain extends GameCore {
         Image wheatImage4 = AdventMain.loadImage("res/Wheat4.png");
         Image wheatImage5 = AdventMain.loadImage("res/Wheat5.png");
 
-        AdventMain.wheatHealthMax = wheatImage.getWidth(null);
-
         AdventMain.wheatAnim = new Animation();
         AdventMain.wheatAnim.addFrame(wheatImage, 20000);
         AdventMain.wheatAnim.addFrame(wheatImage2, 20000);
@@ -162,8 +189,8 @@ public class AdventMain extends GameCore {
         AdventMain.wheatAnim.addFrame(wheatImage3, 20000);
 
         //wheat creation
-        float oxLoc = AdventMain.oneFourthRight;
-        float oyLoc = AdventMain.oneFourthDown;
+        float oxLoc = ScreenFractions.oneFourthRight;
+        float oyLoc = ScreenFractions.oneFourthDown;
         float rightOfWheat = 0;
         float bottomOfWheat;
         int horizontalWheat = 0;
@@ -171,17 +198,17 @@ public class AdventMain extends GameCore {
         boolean h = false;
         int counter = 0;
 
-        while (oyLoc + wheatImage.getHeight(null) < AdventMain.oneFourthUp) {
+        while (oyLoc + wheatImage.getHeight(null) < ScreenFractions.oneFourthUp) {
             wheats.add(new Wheat(wheatAnim));
             wheats.get(counter).setX(oxLoc);
             wheats.get(counter).setY(oyLoc);
             oxLoc += wheatImage.getWidth(null);
             if (!h)
                 horizontalWheat++;
-            if (oxLoc >= AdventMain.oneFourthLeft - wheatImage.getWidth(null)) {
+            if (oxLoc >= ScreenFractions.oneFourthLeft - wheatImage.getWidth(null)) {
                 h = true;
                 rightOfWheat = oxLoc;
-                oxLoc = AdventMain.oneFourthRight;
+                oxLoc = ScreenFractions.oneFourthRight;
                 verticalWheat++;
                 oyLoc += wheatImage.getHeight(null);
             }
@@ -191,14 +218,14 @@ public class AdventMain extends GameCore {
         bottomOfWheat = oyLoc;
 
         //Center Wheat in Field
-        float rightDifference = AdventMain.oneFourthLeft - rightOfWheat;
-        float bottomDifference = AdventMain.oneFourthUp - bottomOfWheat;
+        float rightDifference = ScreenFractions.oneFourthLeft - rightOfWheat;
+        float bottomDifference = ScreenFractions.oneFourthUp - bottomOfWheat;
 
         rightDifference /= 2;
         bottomDifference /= 2;
 
-        oxLoc = AdventMain.oneFourthRight + rightDifference;
-        oyLoc = AdventMain.oneFourthDown + bottomDifference;
+        oxLoc = ScreenFractions.oneFourthRight + rightDifference;
+        oyLoc = ScreenFractions.oneFourthDown + bottomDifference;
 
         int cHWheat = 0;
         int cVWheat = 0;
@@ -213,7 +240,7 @@ public class AdventMain extends GameCore {
             if (cHWheat == horizontalWheat) {
                 cHWheat = 0;
                 cVWheat++;
-                oxLoc = AdventMain.oneFourthRight + rightDifference;
+                oxLoc = ScreenFractions.oneFourthRight + rightDifference;
                 oyLoc += wheatImage.getHeight(null);
             }
             counter++;
@@ -328,7 +355,7 @@ public class AdventMain extends GameCore {
         //This is for Wheat losing health and dying
         List<Wheat> wheatsToRemove = new ArrayList<>();
         for (Wheat wheat : wheats) {
-            wheat.setHealthBarSize((wheatHealthMax * wheat.getHealth()) / 100);
+            wheat.setHealthBarSize((wheat.getWidth() * wheat.getHealth()) / 100);
             if (wheat.getHealth() <= 0) {
                 LocationCapture.addLocation(wheat.getX(), wheat.getY());
                 wheatsToRemove.add(wheat);
@@ -601,7 +628,7 @@ public class AdventMain extends GameCore {
         if (player.getY() < 0 && !moveDown.isPressed()) {
             velocityY = 0;
         }
-        if (player.getY() + player.getHeight() > nineTenY && !moveUp.isPressed()) {
+        if (player.getY() + player.getHeight() > ScreenFractions.nineTenY && !moveUp.isPressed()) {
             velocityY = 0;
         }
 
@@ -933,11 +960,11 @@ public class AdventMain extends GameCore {
 
         //draw Health Bar
         g.setColor(Color.red);
-        g.fillRect(threeTwentyX, fourteenFifteenY, (int) player.getHealth() * 3, screen.getHeight() - twentyNineThirtyY);
+        g.fillRect(ScreenFractions.threeTwentyX, ScreenFractions.fourteenFifteenY, (int) player.getHealth() * 3, screen.getHeight() - ScreenFractions.twentyNineThirtyY);
 
         //draw Health Bar Outline
         g.setColor(Color.white);
-        g.drawRect(threeTwentyX, fourteenFifteenY, playerHBSize, screen.getHeight() - twentyNineThirtyY);
+        g.drawRect(ScreenFractions.threeTwentyX, ScreenFractions.fourteenFifteenY, playerHBSize, screen.getHeight() - ScreenFractions.twentyNineThirtyY);
 
         waveInfo.draw(g);
         moneyInfo.draw(g);
@@ -1013,9 +1040,7 @@ public class AdventMain extends GameCore {
             musicThr = new MoosicThread(tempClip);
             musicThr.start();
 
-        } catch (UnsupportedAudioFileException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
+        } catch (UnsupportedAudioFileException | IOException e) {
             e.printStackTrace();
         }
 
