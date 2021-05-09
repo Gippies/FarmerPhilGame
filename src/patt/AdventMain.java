@@ -84,8 +84,8 @@ public class AdventMain extends GameCore {
     @Override
     public void init() {
         super.init();
-        Window window = screen.getFullScreenWindow();
-        ScreenFractions.init(screen.getWidth(), screen.getHeight());
+        Window window = screenManager.getFullScreenWindow();
+        ScreenFractions.init(screenManager.getWidth(), screenManager.getHeight());
         inputManager = new InputManager(window);
 
         // use these lines for relative mouse mode
@@ -94,9 +94,9 @@ public class AdventMain extends GameCore {
 
         blackRect = new Polygon();
         blackRect.addPoint(0, ScreenFractions.nineTenY);
-        blackRect.addPoint(screen.getWidth(), ScreenFractions.nineTenY);
-        blackRect.addPoint(screen.getWidth(), screen.getHeight());
-        blackRect.addPoint(0, screen.getHeight());
+        blackRect.addPoint(screenManager.getWidth(), ScreenFractions.nineTenY);
+        blackRect.addPoint(screenManager.getWidth(), screenManager.getHeight());
+        blackRect.addPoint(0, screenManager.getHeight());
 
         Crop pauseCrop = new Crop("res/pauseWood.png", ScreenFractions.twoFifthX, ScreenFractions.fiveSixtY, ScreenFractions.threeFifthX - ScreenFractions.twoFifthX, ScreenFractions.elevenSixtY - ScreenFractions.fiveSixtY);
         Crop startCrop = new Crop("res/pauseWood.png", ScreenFractions.oneTwentyX, ScreenFractions.oneTwentyY, ScreenFractions.nineteenTwentyX - ScreenFractions.oneTwentyX, ScreenFractions.nineteenTwentyY - ScreenFractions.oneTwentyY);
@@ -158,7 +158,7 @@ public class AdventMain extends GameCore {
 
         Grub g = new Grub();
 
-        gStarters = new GrubStartLocation(AdventMain.screen.getWidth(), ScreenFractions.nineTenY, g.grubImageWidth, g.grubImageHeight);
+        gStarters = new GrubStartLocation(AdventMain.screenManager.getWidth(), ScreenFractions.nineTenY, g.grubImageWidth, g.grubImageHeight);
         for (int k = 0; k < AdventMain.numOfGrubby; k++) {
             Grub grub = new Grub();
             grubs.add(grub);
@@ -621,7 +621,7 @@ public class AdventMain extends GameCore {
         if (player.getX() < 0 && !moveRight.isPressed()) {
             velocityX = 0;
         }
-        if (player.getX() + player.getWidth() > screen.getWidth() && !moveLeft.isPressed()) {
+        if (player.getX() + player.getWidth() > screenManager.getWidth() && !moveLeft.isPressed()) {
             velocityX = 0;
         }
 
@@ -930,7 +930,7 @@ public class AdventMain extends GameCore {
         //If the game is over do this:
         if (gameOver) {
             g.setFont(new Font("TimesRoman", Font.PLAIN, 212));
-            drawCenteredStringX("Game Over", screen.getWidth(), screen.getHeight(), g);
+            drawCenteredStringX("Game Over", screenManager.getWidth(), screenManager.getHeight(), g);
         }
 
         //Start Menu
@@ -960,11 +960,11 @@ public class AdventMain extends GameCore {
 
         //draw Health Bar
         g.setColor(Color.red);
-        g.fillRect(ScreenFractions.threeTwentyX, ScreenFractions.fourteenFifteenY, (int) player.getHealth() * 3, screen.getHeight() - ScreenFractions.twentyNineThirtyY);
+        g.fillRect(ScreenFractions.threeTwentyX, ScreenFractions.fourteenFifteenY, (int) player.getHealth() * 3, screenManager.getHeight() - ScreenFractions.twentyNineThirtyY);
 
         //draw Health Bar Outline
         g.setColor(Color.white);
-        g.drawRect(ScreenFractions.threeTwentyX, ScreenFractions.fourteenFifteenY, playerHBSize, screen.getHeight() - ScreenFractions.twentyNineThirtyY);
+        g.drawRect(ScreenFractions.threeTwentyX, ScreenFractions.fourteenFifteenY, playerHBSize, screenManager.getHeight() - ScreenFractions.twentyNineThirtyY);
 
         waveInfo.draw(g);
         moneyInfo.draw(g);

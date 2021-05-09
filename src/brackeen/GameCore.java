@@ -30,7 +30,7 @@ public abstract class GameCore {
 
     private static final Map<String, Image> imageMap = new HashMap<>();
     private boolean isRunning;
-    public static ScreenManager screen;
+    public static ScreenManager screenManager;
 
     /**
      * Signals the game loop that it's time to quit
@@ -47,7 +47,7 @@ public abstract class GameCore {
             init();
             gameLoop();
         } finally {
-            screen.restoreScreen();
+            screenManager.restoreScreen();
             lazilyExit();
         }
     }
@@ -78,12 +78,12 @@ public abstract class GameCore {
      * Sets full screen mode and initiates and objects.
      */
     public void init() {
-        screen = new ScreenManager();
-        DisplayMode displayMode = screen
+        screenManager = new ScreenManager();
+        DisplayMode displayMode = screenManager
                 .findFirstCompatibleMode(POSSIBLE_MODES);
-        screen.setFullScreen(displayMode);
+        screenManager.setFullScreen(displayMode);
 
-        Window window = screen.getFullScreenWindow();
+        Window window = screenManager.getFullScreenWindow();
         window.setFont(new Font("Dialog", Font.PLAIN, FONT_SIZE));
         window.setBackground(Color.blue);
         window.setForeground(Color.white);
@@ -113,10 +113,10 @@ public abstract class GameCore {
             update(elapsedTime);
 
             // draw the screen
-            Graphics2D g = screen.getGraphics();
+            Graphics2D g = screenManager.getGraphics();
             draw(g);
             g.dispose();
-            screen.update();
+            screenManager.update();
 
             // don't take a nap! run as fast as possible
 			/*

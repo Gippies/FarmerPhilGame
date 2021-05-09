@@ -41,8 +41,8 @@ public class CreatorMethods {
 
         AdventMain.grassGrid = new ArrayList<Sprite>();
 
-        while (greenY <= AdventMain.screen.getHeight()) {
-            while (greenX <= AdventMain.screen.getWidth()) {
+        while (greenY <= AdventMain.screenManager.getHeight()) {
+            while (greenX <= AdventMain.screenManager.getWidth()) {
 
                 AdventMain.grassGrid.add(new Sprite(grassAnim));
                 AdventMain.grassGrid.get(AdventMain.grassGrid.size() - 1).setX(greenX);
@@ -54,7 +54,7 @@ public class CreatorMethods {
         }
 
         //Defining the black Rectangle
-        ScreenFractions.nineTenY = (AdventMain.screen.getHeight() * 9) / 10;
+        ScreenFractions.nineTenY = (AdventMain.screenManager.getHeight() * 9) / 10;
 
         //Defining the Farmland
         Image dirtImage = GameCore.loadImage("res/dirt.png");
@@ -97,8 +97,8 @@ public class CreatorMethods {
         playerIdleU.addFrame(playerImageU, 500);
 
         AdventMain.player = new Player(playerIdleL, playerIdleR, playerIdleU);
-        AdventMain.player.setX(AdventMain.screen.getWidth() / 2.0f - (AdventMain.player.getWidth() / 2.0f));
-        AdventMain.player.setY(AdventMain.screen.getHeight() / 2.0f - (AdventMain.player.getHeight() / 2.0f));
+        AdventMain.player.setX(AdventMain.screenManager.getWidth() / 2.0f - (AdventMain.player.getWidth() / 2.0f));
+        AdventMain.player.setY(AdventMain.screenManager.getHeight() / 2.0f - (AdventMain.player.getHeight() / 2.0f));
 
         //Weapon Imaging:
 
@@ -195,12 +195,12 @@ public class CreatorMethods {
         AdventMain.moneyNumber = AdventMain.MONEY_START;
         DecimalFormat mf = new DecimalFormat("$#,###,##0.00");
 
-        AdventMain.waveInfo = new MyLabel(ScreenFractions.twoFifthX, ScreenFractions.fourteenFifteenY + (AdventMain.screen.getHeight() - ScreenFractions.twentyNineThirtyY), "Wave: " + AdventMain.waveNumber);
+        AdventMain.waveInfo = new MyLabel(ScreenFractions.twoFifthX, ScreenFractions.fourteenFifteenY + (AdventMain.screenManager.getHeight() - ScreenFractions.twentyNineThirtyY), "Wave: " + AdventMain.waveNumber);
         //moneyInfo = new MyLabel(oneFourthLeft, fourteenFifteenY+(screen.getHeight() - twentyNineThirtyY), "Money: " + mf.format(moneyNumber));
         AdventMain.moneyInfo = new MyLabel(ScreenFractions.twoFifthX, ScreenFractions.fourteenFifteenY, "Money: " + mf.format(AdventMain.moneyNumber));
-        AdventMain.lblHealth = new MyLabel(ScreenFractions.threeFortyX, ScreenFractions.fourteenFifteenY + (AdventMain.screen.getHeight() - ScreenFractions.twentyNineThirtyY), "Health: ");
+        AdventMain.lblHealth = new MyLabel(ScreenFractions.threeFortyX, ScreenFractions.fourteenFifteenY + (AdventMain.screenManager.getHeight() - ScreenFractions.twentyNineThirtyY), "Health: ");
         AdventMain.weaponInfo = new MyLabel(ScreenFractions.threeFifthX, ScreenFractions.fourteenFifteenY, "Current Weapon: WoodBat");
-        AdventMain.ammoInfo = new MyLabel(ScreenFractions.threeFifthX, ScreenFractions.fourteenFifteenY + (AdventMain.screen.getHeight() - ScreenFractions.twentyNineThirtyY), "Wave Ammo: " + Double.POSITIVE_INFINITY);
+        AdventMain.ammoInfo = new MyLabel(ScreenFractions.threeFifthX, ScreenFractions.fourteenFifteenY + (AdventMain.screenManager.getHeight() - ScreenFractions.twentyNineThirtyY), "Wave Ammo: " + Double.POSITIVE_INFINITY);
     }
 
 }
