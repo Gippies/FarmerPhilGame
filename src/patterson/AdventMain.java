@@ -90,7 +90,6 @@ public class AdventMain extends GameCore {
 
         // use these lines for relative mouse mode
         //inputManager.setRelativeMouseMode(true);
-        inputManager.setCursor(InputManager.INVISIBLE_CURSOR);
 
         blackRect = new Polygon();
         blackRect.addPoint(0, ScreenFractions.nineTenY);
@@ -646,7 +645,6 @@ public class AdventMain extends GameCore {
         if (pause.isPressed()) {
             if (isPaused && !pauseIsPressed) {
                 isPaused = false;
-                inputManager.setCursor(InputManager.INVISIBLE_CURSOR);
             } else if (!pauseIsPressed) {
                 isPaused = true;
                 inputManager.setCursor(normMouse);
@@ -695,7 +693,6 @@ public class AdventMain extends GameCore {
         if (mouseClick.isPressed() && shopMenu.getButton(0).isInBounds(inputManager.getMouseX(), inputManager.getMouseY()) && !mouseButtonIsPressed) {
             shopMenu.getButton(0).press();
             isShop = false;
-            inputManager.setCursor(InputManager.INVISIBLE_CURSOR);
             mouseButtonIsPressed = true;
         }
 
@@ -811,7 +808,6 @@ public class AdventMain extends GameCore {
         if (mouseClick.isPressed() && startMenu.getButton(0).isInBounds(inputManager.getMouseX(), inputManager.getMouseY()) && !mouseButtonIsPressed) {
             startMenu.getButton(0).press();
             isStart = false;
-            inputManager.setCursor(InputManager.INVISIBLE_CURSOR);
             mouseButtonIsPressed = true;
         }
 
