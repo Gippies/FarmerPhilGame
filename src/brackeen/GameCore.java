@@ -14,19 +14,12 @@ public abstract class GameCore {
     protected static final int FONT_SIZE = 24;
 
     private static final DisplayMode[] POSSIBLE_MODES = {
-            new DisplayMode(3840, 2160, 32, 0),
-            new DisplayMode(1920, 1080, 32, 0),
-            new DisplayMode(1366, 768, 32, 0),
-            new DisplayMode(1280, 1024, 32, 0),
-            new DisplayMode(800, 600, 32, 0),
-            /* new DisplayMode(800, 600, 16, 0),
-            new DisplayMode(800, 600, 24, 0),
-            new DisplayMode(640, 480, 16, 0),
-            new DisplayMode(640, 480, 32, 0),
-            new DisplayMode(640, 480, 24, 0),
-            new DisplayMode(1024, 768, 16, 0),
-            new DisplayMode(1024, 768, 32, 0),
-            new DisplayMode(1024, 768, 24, 0), */};
+        new DisplayMode(3840, 2160, 32, 0),
+        new DisplayMode(1920, 1080, 32, 0),
+        new DisplayMode(1366, 768, 32, 0),
+        new DisplayMode(1280, 1024, 32, 0),
+        new DisplayMode(800, 600, 32, 0),
+    };
 
     private static final Map<String, Image> imageMap = new HashMap<>();
     private boolean isRunning;
@@ -102,8 +95,7 @@ public abstract class GameCore {
      * Runs through the game loop until stop() is called.
      */
     public void gameLoop() {
-        long startTime = System.currentTimeMillis();
-        long currTime = startTime;
+        long currTime = System.currentTimeMillis();
 
         while (isRunning) {
             long elapsedTime = System.currentTimeMillis() - currTime;
@@ -117,11 +109,6 @@ public abstract class GameCore {
             draw(g);
             g.dispose();
             screenManager.update();
-
-            // don't take a nap! run as fast as possible
-			/*
-			  try { Thread.sleep(20); } catch (InterruptedException ex) { }
-			 */
         }
     }
 
