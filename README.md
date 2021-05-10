@@ -1,5 +1,6 @@
 # FarmerPhilGame
-This is the code for the game I made throughout my senior year in Java.
-It was a fun project and I hope I can continue to work on it into college.
-If you would like to use any of my code you can, however, some of the code is from David Brackeen's, "Developing Games in Java"
-  so you might need his permission as well (however I believe his code is open source anyway)
+This is the code for the game I made throughout my high school senior year in Java.
+I've recently been attempting to clean it up in the hopes of making it easier to add new features.
+As of writing this, the cleanup is still ongoing...
+
+Also, fair warning: attempting to run this may soft-lock your computer, especially if you're on a Mac.
