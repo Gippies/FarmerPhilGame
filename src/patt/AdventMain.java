@@ -596,24 +596,24 @@ public class AdventMain extends GameCore {
 
         if (moveLeft.isPressed()) {
             player.setIdleL();
-            velocityX -= player.SPEED;
+            velocityX -= player.getSpeed();
             playerGoingLeft = true;
         }
 
         if (moveRight.isPressed()) {
             player.setIdleR();
-            velocityX += player.SPEED;
+            velocityX += player.getSpeed();
             playerGoingLeft = false;
         }
 
         if (moveUp.isPressed()) {
             player.setIdleU();
-            velocityY -= player.SPEED;
+            velocityY -= player.getSpeed();
         }
 
         if (moveDown.isPressed()) {
             player.setIdleU();
-            velocityY += player.SPEED;
+            velocityY += player.getSpeed();
         }
 
 

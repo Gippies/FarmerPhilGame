@@ -12,7 +12,7 @@ import java.util.List;
  */
 public class Player extends Sprite {
 
-    public float SPEED = .4f;
+    private float speed;
     private double health;
     private Weapon currentWeapon;
 
@@ -27,6 +27,7 @@ public class Player extends Sprite {
         this.stopR = stopR;
         this.stopU = stopU;
         health = 100;
+        speed = 0.4f;
         weaponInv = new ArrayList<>();
     }
 
@@ -53,6 +54,10 @@ public class Player extends Sprite {
         setAnim(stopU);
     }
 
+    public float getSpeed() {
+        return speed;
+    }
+
     public double getHealth() {
         return health;
     }
@@ -75,18 +80,18 @@ public class Player extends Sprite {
     public void deleteWeapon(Weapon weapon) {
         weaponInv.remove(weapon);
         if (currentWeapon.equals(CreatorMethods.Tractor)) {
-            this.SPEED = .5f;
+            speed = .5f;
         } else {
-            this.SPEED = .4f;
+            speed = .4f;
         }
     }
 
     public void deleteWeapon(int index) {
         weaponInv.remove(index);
         if (currentWeapon.equals(CreatorMethods.Tractor)) {
-            this.SPEED = .5f;
+            speed = .5f;
         } else {
-            this.SPEED = .4f;
+            speed = .4f;
         }
     }
 
@@ -136,9 +141,9 @@ public class Player extends Sprite {
         }
 
         if (currentWeapon.equals(CreatorMethods.Tractor)) {
-            this.SPEED = .5f;
+            speed = .5f;
         } else {
-            this.SPEED = .4f;
+            speed = .4f;
         }
     }
 }
