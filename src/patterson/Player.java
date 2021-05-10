@@ -1,4 +1,4 @@
-package patt;
+package patterson;
 
 import brackeen.Animation;
 import brackeen.Sprite;

@@ -1,4 +1,4 @@
-package patt;
+package patterson;
 
 import java.awt.Image;
 import java.util.ArrayList;

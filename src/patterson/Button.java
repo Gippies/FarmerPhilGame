@@ -1,4 +1,4 @@
-package patt;
+package patterson;
 
 import java.awt.Color;
 import java.awt.FontMetrics;

@@ -1,4 +1,4 @@
-package patt;
+package patterson;
 
 public class ScreenFractions {
     public static int twentyNineThirtyY,
